@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no, email=no, address=no">
     <title>Kazakhstan History Quiz & Essay</title>
-    <link rel="stylesheet" href="style.css?v=47">
+    <link rel="stylesheet" href="style.css?v=51">
 </head>
 <body>
 
@@ -427,89 +427,52 @@
         </div>
     </div>
 
-    <div id="games-page" class="hidden games-fullpage">
-        <div class="games-shell">
-            <div class="games-topline">
-                <button class="nav-arrow-btn" id="games-page-back" onclick="handleGamesBack()" aria-label="Back">
-                    <span class="icon-svg" id="games-back-icon"></span>
-                </button>
-                <div>
-                    <h2>GAMES</h2>
-                    <p id="games-section-title">Оқу режимін таңдаңыз</p>
-                </div>
-                <div class="games-score hidden" id="game-score-display">0 / 20</div>
-            </div>
+    <!-- Game lobby (Battlegrounds style): no back button - use the menu to leave -->
+    <div id="lobby-page" class="hidden lobby-page">
+        <div class="lobby-bg" aria-hidden="true"></div>
 
-            <div class="game-mode-grid" id="game-mode-grid">
-                <button class="game-mode-card" onclick="openGameMode('rush')">
-                    <span class="game-mode-number">01</span>
-                    <strong>Answer Rush</strong>
-                    <span>Уақытқа қарсы жылдам тест</span>
-                </button>
-                <button class="game-mode-card" onclick="openGameMode('cards')">
-                    <span class="game-mode-number">02</span>
-                    <strong>Флеш-карточкалар</strong>
-                    <span>Тақырыпты ашып, толық ақпаратты қайталау</span>
-                </button>
-                <button class="game-mode-card" onclick="openGameMode('map')">
-                    <span class="game-mode-number">03</span>
-                    <strong>Тарихи карта</strong>
-                    <span>Мемлекеттер мен тарихи аймақтарды зерттеу</span>
-                </button>
-            </div>
+        <div class="lobby-players" id="lobby-players" aria-live="polite"></div>
 
-            <div class="game-mode-view hidden" id="answer-rush-view">
-                <div class="games-stage" id="games-stage">
-                    <div class="games-question" id="game-question-text">Press play to start</div>
-                    <div class="games-timer">
-                        <div id="game-timer-progress"></div>
+        <div class="lobby-panel" id="lobby-panel">
+            <button class="lobby-type" id="lobby-type-btn" onclick="openLobbyTypes()">
+                <img id="lobby-type-img" src="assets/quiz.png" alt="" draggable="false">
+                <span class="lobby-type-text">
+                    <small>GAME TYPE</small>
+                    <strong id="lobby-type-name">CLASSIC</strong>
+                </span>
+            </button>
+            <div class="lobby-modes" id="lobby-modes" role="tablist" aria-label="Team size">
+                <button class="lobby-mode active" data-size="1" onclick="setLobbyMode(1)">SOLO</button>
+                <button class="lobby-mode" data-size="2" onclick="setLobbyMode(2)">DUO</button>
+                <button class="lobby-mode" data-size="4" onclick="setLobbyMode(4)">SQUAD</button>
+            </div>
+            <button class="lobby-play" id="lobby-play" onclick="lobbyPlayClick()" aria-label="Play">
+                <span class="lobby-play-idle">PLAY</span>
+                <span class="lobby-play-search">
+                    <span class="lobby-timer" id="lobby-timer">00:00</span>
+                    <span class="lobby-play-label" id="lobby-play-label">FINDING PLAYERS</span>
+                    <span class="lobby-cancel icon-svg" id="lobby-cancel-icon"></span>
+                </span>
+            </button>
+        </div>
+
+        <!-- Game-type picker: no card, same look as the home mode picker -->
+        <div id="lobby-type-page" class="hidden lobby-type-page">
+            <div class="lobby-bg" aria-hidden="true"></div>
+            <div class="lobby-type-inner">
+                <div class="mode-carousel">
+                    <button class="mode-arrow mode-arrow-left" onclick="rotateLobbyType(-1)" aria-label="Previous type"><span class="icon-svg" id="lobby-prev-icon"></span></button>
+                    <div class="mode-stage" id="lobby-type-stage">
+                        <div class="mode-glow" aria-hidden="true"></div>
+                        <div class="mode-shadow"></div>
+                        <div class="mode-card"><img src="assets/quiz.png" alt="Classic" draggable="false"></div>
+                        <div class="mode-card"><img src="assets/week.png" alt="Weekly" draggable="false"></div>
+                        <div class="mode-card"><img src="assets/essay.png" alt="Essay" draggable="false"></div>
                     </div>
-                    <div class="game-bubbles" id="game-bubbles"></div>
+                    <button class="mode-arrow mode-arrow-right" onclick="rotateLobbyType(1)" aria-label="Next type"><span class="icon-svg" id="lobby-next-icon"></span></button>
                 </div>
-                <div class="games-actions">
-                    <button class="btn" id="game-play-btn" onclick="startAnswerRush()">PLAY</button>
-                    <button class="btn btn-secondary" onclick="resetAnswerRush()">RESET</button>
-                </div>
-            </div>
-
-            <div class="game-mode-view hidden" id="flashcards-view">
-                <div class="flashcard-progress"><span id="flashcard-position">1 / 8</span></div>
-                <button class="flashcard" id="flashcard" onclick="flipFlashcard()" aria-label="Карточканы аудару">
-                    <span class="flashcard-face flashcard-front">
-                        <small>ТАҚЫРЫП</small>
-                        <strong id="flashcard-topic">Ботай мәдениеті</strong>
-                        <span>Ақпаратты көру үшін карточканы басыңыз</span>
-                    </span>
-                    <span class="flashcard-face flashcard-back">
-                        <small id="flashcard-period">Энеолит</small>
-                        <strong id="flashcard-back-title">Ботай мәдениеті</strong>
-                        <span id="flashcard-info"></span>
-                    </span>
-                </button>
-                <div class="flashcard-actions">
-                    <button class="nav-arrow-btn" onclick="changeFlashcard(-1)" aria-label="Алдыңғы карточка">‹</button>
-                    <button class="btn btn-secondary" onclick="flipFlashcard()">АУДАРУ</button>
-                    <button class="nav-arrow-btn" onclick="changeFlashcard(1)" aria-label="Келесі карточка">›</button>
-                </div>
-            </div>
-
-            <div class="game-mode-view hidden" id="history-map-view">
-                <div class="history-map-layout">
-                    <div class="history-map" aria-label="Қазақстанның тарихи картасы">
-                        <div class="map-land"></div>
-                        <button class="map-marker marker-nogai" onclick="selectMapState('nogai')">Ноғай Ордасы</button>
-                        <button class="map-marker marker-kazakh" onclick="selectMapState('kazakh')">Қазақ хандығы</button>
-                        <button class="map-marker marker-moghul" onclick="selectMapState('moghul')">Моғолстан</button>
-                        <button class="map-marker marker-siberia" onclick="selectMapState('siberia')">Сібір хандығы</button>
-                        <span class="map-water map-caspian">Каспий</span>
-                        <span class="map-water map-balkhash">Балқаш</span>
-                    </div>
-                    <div class="map-info" id="map-info">
-                        <small id="map-state-period">XV–XIX ғасырлар</small>
-                        <h3 id="map-state-title">Қазақ хандығы</h3>
-                        <p id="map-state-info"></p>
-                    </div>
-                </div>
+                <div class="mode-name" id="lobby-type-title">CLASSIC</div>
+                <button class="btn mode-start-btn" onclick="selectLobbyType()">SELECT</button>
             </div>
         </div>
     </div>
@@ -552,17 +515,6 @@
         const quizScreen = document.getElementById('quiz-screen');
         const essayScreen = document.getElementById('essay-screen');
         const resultScreen = document.getElementById('result-screen');
-        const gamesPage = document.getElementById('games-page');
-        const gameQuestionText = document.getElementById('game-question-text');
-        const gameBubbles = document.getElementById('game-bubbles');
-        const gameScoreDisplay = document.getElementById('game-score-display');
-        const gameTimerProgress = document.getElementById('game-timer-progress');
-        const gameModeGrid = document.getElementById('game-mode-grid');
-        const answerRushView = document.getElementById('answer-rush-view');
-        const flashcardsView = document.getElementById('flashcards-view');
-        const historyMapView = document.getElementById('history-map-view');
-        const gamesSectionTitle = document.getElementById('games-section-title');
-        const flashcard = document.getElementById('flashcard');
 
         const accountBar = document.getElementById('account-bar');
         const joinBtn = document.getElementById('join-btn');
@@ -758,7 +710,6 @@
         const ICON_SHIELD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
         const ICON_MUSIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle></svg>';
         const ICON_HISTORY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 3 3 9 9 9"></polyline><path d="M12 7v5l3 2"></path></svg>';
-        const ICON_GAMEPAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1"></circle><circle cx="18" cy="11" r="1"></circle><path d="M5.2 18.4 8 15h8l2.8 3.4A2.2 2.2 0 0 0 22.7 17l-1.4-7.3A4.5 4.5 0 0 0 16.9 6H7.1a4.5 4.5 0 0 0-4.4 3.7L1.3 17a2.2 2.2 0 0 0 3.9 1.4Z"></path></svg>';
         const ICON_TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>';
         const ICON_WARNING = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
 
@@ -784,7 +735,6 @@
         document.getElementById('week-picker-close-icon').innerHTML = ICON_X;
         document.getElementById('history-result-close-icon').innerHTML = ICON_X;
         document.getElementById('hr-download-icon').innerHTML = ICON_DOWNLOAD;
-        document.getElementById('games-back-icon').innerHTML = ICON_CHEVRON_LEFT;
         document.getElementById('history-back-icon').innerHTML = ICON_CHEVRON_LEFT;
         guardWarningIcon.innerHTML = ICON_WARNING;
         muteIcon.innerHTML = ICON_SPEAKER;
@@ -863,7 +813,7 @@
             quizScreen.classList.add('hidden');
             essayScreen.classList.add('hidden');
             resultScreen.classList.add('hidden');
-            closeGamesPage();
+            closeLobby();
             syncFinishButtonVisibility();
             showNicknameScreen();
         }
@@ -926,14 +876,12 @@
             closeHistoryResult();
             clearInterval(timer);
             clearInterval(essayTimer);
-            clearInterval(gameTimer);
-            gameRunning = false;
             stopTestGuardSession();
             nicknameScreen.classList.add('hidden');
             quizScreen.classList.add('hidden');
             essayScreen.classList.add('hidden');
             resultScreen.classList.add('hidden');
-            gamesPage.classList.add('hidden');
+            closeLobby();
             adminPanelPage.classList.add('hidden');
             usersPage.classList.add('hidden');
             historyPage.classList.add('hidden');
@@ -951,7 +899,7 @@
             quizScreen.classList.add('hidden');
             essayScreen.classList.add('hidden');
             resultScreen.classList.add('hidden');
-            closeGamesPage();
+            closeLobby();
             startScreen.classList.remove('hidden');
             syncAccountBarVisibility();
             syncFinishButtonVisibility();
@@ -1135,14 +1083,18 @@
         }
 
         /* Side pictures rest at the page edges, so a new mode slides in from the edge to the centre */
-        function updateModeMetrics() {
-            const stageWidth = modeStage.clientWidth;
-            const card = modeStage.querySelector('.mode-card.is-center');
+        function updateModeMetrics(stage) {
+            stage = stage || modeStage;
+            const stageWidth = stage.clientWidth;
+            const card = stage.querySelector('.mode-card.is-center');
             if (!stageWidth || !card) return;
             const previewWidth = card.offsetWidth * 0.58;
-            modeStage.style.setProperty('--preview-shift', Math.round(stageWidth / 2 - previewWidth * 0.25) + 'px');
+            stage.style.setProperty('--preview-shift', Math.round(stageWidth / 2 - previewWidth * 0.25) + 'px');
         }
-        window.addEventListener('resize', updateModeMetrics);
+        window.addEventListener('resize', () => {
+            updateModeMetrics(modeStage);
+            if (typeof lobbyStage !== 'undefined') updateModeMetrics(lobbyStage);
+        });
 
         function rotateMode(step) {
             if (modeRotateLocked) return;
@@ -1160,7 +1112,7 @@
         function startSelectedMode() {
             const mode = MODES[modeIndex];
             if (mode === 'quiz') startQuiz();
-            else if (mode === 'game') openGamesPage();
+            else if (mode === 'game') openLobby();
             else openWeekPicker(mode);
         }
 
@@ -1298,34 +1250,56 @@
             weekWheelScroll.addEventListener('pointercancel', endDrag);
         })();
 
-        let gameQuestions = [];
-        let gameIndex = 0;
-        let gameScore = 0;
-        let gameTimer = null;
-        let gameTimeLeft = 10;
-        let gameRunning = false;
-        let activeGameMode = '';
-        let flashcardIndex = 0;
-
-        const flashcardData = [
-            { topic: 'Ботай мәдениеті', period: 'Энеолит, б.з.б. IV мыңжылдық', info: 'Солтүстік Қазақстандағы Ботай қонысы жылқыны ерте қолға үйретудің маңызды орталығы саналады. Қазбалардан жылқы сүйектері, ауыздық іздері және қымыз қалдықтары табылған.' },
-            { topic: 'Сақтар', period: 'Б.з.б. VIII–III ғасырлар', info: 'Сақтар Қазақстан аумағында өмір сүрген көшпелі тайпалар бірлестігі. Олардың мәдениеті аң стилімен, обаларымен және Есік қорғанынан табылған Алтын адаммен белгілі.' },
-            { topic: 'Ғұндар', period: 'Б.з.б. III ғ. – б.з. V ғ.', info: 'Ғұндар атты әскерге сүйенген ірі көшпелі бірлестік құрды. Олардың батысқа жылжуы Еуразиядағы Халықтардың ұлы қоныс аударуына ықпал етті.' },
-            { topic: 'Түрік қағанаты', period: '552–603 жылдар', info: 'Бумын қаған негізін қалаған мемлекет Алтайдан Қара теңізге дейінгі кеңістікте түркі тайпаларын біріктірді. Ұлы Жібек жолының маңызды бөлігіне бақылау жүргізді.' },
-            { topic: 'Алтын Орда', period: 'XIII–XV ғасырлар', info: 'Жошы ұлысының негізінде құрылған мемлекет Еуразия даласының саяси және сауда өмірінде маңызды рөл атқарды. Оның орталықтары Сарай-Бату және Сарай-Берке қалалары болды.' },
-            { topic: 'Қазақ хандығы', period: '1465/1466–1847 жылдар', info: 'Керей мен Жәнібек сұлтандар Шу мен Талас өңірінде хандықтың негізін қалады. Хандық қазақ халқының этникалық аумағы мен мемлекеттілігін біріктірді.' },
-            { topic: 'Ноғай Ордасы', period: 'XIV–XVI ғасырлар', info: 'Ноғай Ордасы Еділ мен Жайық аралығында қалыптасты. Маңғыт тайпаларының бірлестігі болған орданың қазақ халқымен саяси, этникалық және мәдени байланысы тығыз болды.' },
-            { topic: 'Алаш қозғалысы', period: 'XX ғасырдың басы', info: 'Алаш қайраткерлері ұлттық автономия, білім, жер және заманауи мемлекеттік басқару идеясын көтерді. 1917 жылы Алаш партиясы мен Алаш Орда үкіметі құрылды.' }
+        /* ---------- Game lobby (Battlegrounds style) ---------- */
+        const lobbyPage = document.getElementById('lobby-page');
+        const lobbyPlayersEl = document.getElementById('lobby-players');
+        const lobbyPanel = document.getElementById('lobby-panel');
+        const lobbyPlayBtn = document.getElementById('lobby-play');
+        const lobbyTimerEl = document.getElementById('lobby-timer');
+        const lobbyPlayLabel = document.getElementById('lobby-play-label');
+        const lobbyTypePage = document.getElementById('lobby-type-page');
+        const lobbyStage = document.getElementById('lobby-type-stage');
+        const lobbyTypeTitle = document.getElementById('lobby-type-title');
+        const LOBBY_TYPES = [
+            { name: 'CLASSIC', img: 'assets/quiz.png' },
+            { name: 'WEEKLY', img: 'assets/week.png' },
+            { name: 'ESSAY', img: 'assets/essay.png' }
         ];
+        const ICON_PERSON = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="20" r="11"></circle><path d="M8 58c0-13 10-22 24-22s24 9 24 22z"></path></svg>';
+        let lobbyType = 0;          // chosen game type
+        let lobbyTypeView = 0;      // type currently shown in the picker
+        let lobbyTypeLocked = false;
+        let lobbySize = 1;          // 1 = solo, 2 = duo, 4 = squad
+        let lobbySearching = false;
+        let lobbyStartedAt = 0;
+        let lobbyTimerId = null;
+        let lobbyPlayers = [];      // slot 0 is you; null = still empty
 
-        const mapStateData = {
-            kazakh: { title: 'Қазақ хандығы', period: '1465/1466–1847 жылдар', info: 'Жетісуда құрылып, кейін Қазақстан аумағының басым бөлігін қамтыды. Негізін Керей мен Жәнібек қалады.' },
-            nogai: { title: 'Ноғай Ордасы', period: 'XIV–XVI ғасырлар', info: 'Негізгі аумағы Еділ мен Жайық аралығы болды. Орталығы Сарайшық қаласы саналады.' },
-            moghul: { title: 'Моғолстан', period: '1348–XVI ғасырдың басы', info: 'Жетісу мен Шығыс Түркістан аумағын қамтыды. Қазақ хандығының құрылуына саяси жағдай жасады.' },
-            siberia: { title: 'Сібір хандығы', period: 'XV–XVI ғасырлар', info: 'Батыс Сібір мен Солтүстік Қазақстанға жақын аумақта орналасқан түркі мемлекеті. Астанасы Искер қаласы болды.' }
-        };
+        function lobbyMyName() {
+            return getSavedNickname() || 'Guest';
+        }
 
-        function openGamesPage() {
+        function formatLobbyTime(ms) {
+            const total = Math.floor(ms / 1000);
+            return String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+        }
+
+        function resetLobbyPlayers() {
+            lobbyPlayers = Array.from({ length: lobbySize }, (_, i) => (i === 0 ? { nick: lobbyMyName() } : null));
+        }
+
+        function renderLobbySlots(justFoundIndex) {
+            lobbyPlayersEl.innerHTML = '';
+            lobbyPlayers.forEach((player, i) => {
+                const slot = document.createElement('div');
+                slot.className = 'lobby-slot' + (player ? ' lit' : '') + (!player && lobbySearching ? ' searching' : '') + (i === justFoundIndex ? ' found' : '');
+                slot.innerHTML = `<div class="lobby-avatar">${ICON_PERSON}</div><div class="lobby-nick"></div>`;
+                slot.querySelector('.lobby-nick').textContent = player ? player.nick : (lobbySearching ? 'SEARCHING...' : '');
+                lobbyPlayersEl.appendChild(slot);
+            });
+        }
+
+        function openLobby() {
             if (menuOpen) toggleMenu();
             closeWeekPicker();
             closeHistoryResult();
@@ -1337,174 +1311,159 @@
             quizScreen.classList.add('hidden');
             essayScreen.classList.add('hidden');
             resultScreen.classList.add('hidden');
-            gamesPage.classList.remove('hidden');
+            lobbyPage.classList.remove('hidden');
             syncAccountBarVisibility();
             syncFinishButtonVisibility();
-            showGameModeMenu();
+            cancelLobbySearch();
         }
 
-        function handleGamesBack() {
-            if (activeGameMode) showGameModeMenu();
-            else closeGamesPage();
+        function closeLobby() {
+            cancelLobbySearch();
+            closeLobbyTypes();
+            lobbyPage.classList.add('hidden');
         }
 
-        function showGameModeMenu() {
-            clearInterval(gameTimer);
-            gameRunning = false;
-            activeGameMode = '';
-            gameModeGrid.classList.remove('hidden');
-            answerRushView.classList.add('hidden');
-            flashcardsView.classList.add('hidden');
-            historyMapView.classList.add('hidden');
-            gameScoreDisplay.classList.add('hidden');
-            gamesSectionTitle.innerText = 'Оқу режимін таңдаңыз';
-        }
-
-        function openGameMode(mode) {
-            activeGameMode = mode;
-            gameModeGrid.classList.add('hidden');
-            answerRushView.classList.toggle('hidden', mode !== 'rush');
-            flashcardsView.classList.toggle('hidden', mode !== 'cards');
-            historyMapView.classList.toggle('hidden', mode !== 'map');
-            gameScoreDisplay.classList.toggle('hidden', mode !== 'rush');
-            if (mode === 'rush') {
-                gamesSectionTitle.innerText = 'Answer Rush';
-                resetAnswerRush();
-            } else if (mode === 'cards') {
-                gamesSectionTitle.innerText = 'Флеш-карточкалар';
-                flashcardIndex = 0;
-                renderFlashcard();
-            } else {
-                gamesSectionTitle.innerText = 'Тарихи карта';
-                selectMapState('kazakh');
-            }
-        }
-
-        function renderFlashcard() {
-            const item = flashcardData[flashcardIndex];
-            flashcard.classList.remove('flipped');
-            document.getElementById('flashcard-position').innerText = `${flashcardIndex + 1} / ${flashcardData.length}`;
-            document.getElementById('flashcard-topic').innerText = item.topic;
-            document.getElementById('flashcard-period').innerText = item.period;
-            document.getElementById('flashcard-back-title').innerText = item.topic;
-            document.getElementById('flashcard-info').innerText = item.info;
-        }
-
-        function flipFlashcard() {
-            flashcard.classList.toggle('flipped');
-        }
-
-        function changeFlashcard(step) {
-            flashcardIndex = (flashcardIndex + step + flashcardData.length) % flashcardData.length;
-            renderFlashcard();
-        }
-
-        function selectMapState(key) {
-            const item = mapStateData[key];
-            document.getElementById('map-state-period').innerText = item.period;
-            document.getElementById('map-state-title').innerText = item.title;
-            document.getElementById('map-state-info').innerText = item.info;
-            document.querySelectorAll('.map-marker').forEach(marker => marker.classList.remove('active'));
-            const activeMarker = document.querySelector(`.marker-${key}`);
-            if (activeMarker) activeMarker.classList.add('active');
-        }
-
-        function closeGamesPage() {
-            clearInterval(gameTimer);
-            gameRunning = false;
-            if (gamesPage) gamesPage.classList.add('hidden');
-            if (startScreen && nicknameScreen && nicknameScreen.classList.contains('hidden')) {
-                startScreen.classList.remove('hidden');
-                syncAccountBarVisibility();
-            }
-        }
-
-        function resetAnswerRush() {
-            clearInterval(gameTimer);
-            gameRunning = false;
-            gameQuestions = shuffleArray(fullQuizPool).slice(0, 20);
-            gameIndex = 0;
-            gameScore = 0;
-            gameScoreDisplay.innerText = '0 / 20';
-            gameQuestionText.innerText = 'Press play to start';
-            gameTimerProgress.style.width = '100%';
-            gameBubbles.innerHTML = '';
-            document.getElementById('game-play-btn').innerText = 'PLAY';
-        }
-
-        function startAnswerRush() {
-            gameQuestions = shuffleArray(fullQuizPool).slice(0, 20);
-            gameIndex = 0;
-            gameScore = 0;
-            gameRunning = true;
-            document.getElementById('game-play-btn').innerText = 'RESTART';
-            renderGameQuestion();
-        }
-
-        function renderGameQuestion() {
-            clearInterval(gameTimer);
-            if (!gameRunning) return;
-            if (gameIndex >= gameQuestions.length) {
-                gameRunning = false;
-                gameQuestionText.innerText = 'You won!';
-                gameBubbles.innerHTML = '';
-                gameTimerProgress.style.width = '100%';
-                return;
-            }
-
-            const q = gameQuestions[gameIndex];
-            const answers = shuffleArray([q.correctAnswer, ...q.wrongAnswers]);
-            gameQuestionText.innerText = q.question;
-            gameScoreDisplay.innerText = `${gameScore} / 20`;
-            gameBubbles.innerHTML = '';
-            answers.forEach((answer, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'game-bubble';
-                btn.innerText = answer;
-                btn.style.setProperty('--x', `${12 + (idx % 2) * 54 + Math.random() * 12}%`);
-                btn.style.setProperty('--y', `${20 + idx * 15 + Math.random() * 8}%`);
-                btn.style.setProperty('--float-time', `${5 + Math.random() * 4}s`);
-                btn.onclick = () => chooseGameAnswer(answer, q.correctAnswer);
-                gameBubbles.appendChild(btn);
+        function setLobbyMode(size) {
+            if (lobbySearching) return;
+            lobbySize = size;
+            document.querySelectorAll('.lobby-mode').forEach(btn => {
+                btn.classList.toggle('active', Number(btn.dataset.size) === size);
             });
-            startGameTimer();
+            resetLobbyPlayers();
+            renderLobbySlots();
         }
 
-        function startGameTimer() {
-            gameTimeLeft = 10;
-            gameTimerProgress.style.width = '100%';
-            gameTimer = setInterval(() => {
-                gameTimeLeft--;
-                gameTimerProgress.style.width = `${Math.max(gameTimeLeft, 0) * 10}%`;
-                if (gameTimeLeft <= 0) {
-                    clearInterval(gameTimer);
-                    failGameRound();
-                }
-            }, 1000);
+        function lobbyPlayClick() {
+            if (lobbySearching) cancelLobbySearch();
+            else startLobbySearch();
         }
 
-        function chooseGameAnswer(selected, correct) {
-            if (!gameRunning) return;
-            clearInterval(gameTimer);
-            if (selected === correct) {
-                gameScore++;
-                gameIndex++;
-                gameScoreDisplay.innerText = `${gameScore} / 20`;
-                setTimeout(renderGameQuestion, 350);
-            } else {
-                failGameRound();
+        function startLobbySearch() {
+            lobbySearching = true;
+            lobbyStartedAt = Date.now();
+            lobbyTimerEl.textContent = '00:00';
+            lobbyPlayLabel.textContent = 'FINDING PLAYERS';
+            lobbyPlayBtn.classList.remove('starting');
+            void lobbyPlayBtn.offsetWidth;
+            lobbyPlayBtn.classList.add('searching', 'starting');
+            lobbyPanel.classList.add('busy');
+            clearInterval(lobbyTimerId);
+            lobbyTimerId = setInterval(() => {
+                lobbyTimerEl.textContent = formatLobbyTime(Date.now() - lobbyStartedAt);
+            }, 250);
+            renderLobbySlots();
+        }
+
+        function cancelLobbySearch() {
+            lobbySearching = false;
+            clearInterval(lobbyTimerId);
+            lobbyPlayBtn.classList.remove('searching', 'starting');
+            lobbyPanel.classList.remove('busy');
+            resetLobbyPlayers();
+            renderLobbySlots();
+        }
+
+        /* Called when another player is matched: lights the next empty slot and shows the nickname */
+        function lobbyFoundPlayer(nick) {
+            const index = lobbyPlayers.findIndex((p, i) => i > 0 && !p);
+            if (index === -1) return;
+            lobbyPlayers[index] = { nick: String(nick).slice(0, 24) };
+            renderLobbySlots(index);
+            if (lobbyPlayers.every(Boolean)) {
+                clearInterval(lobbyTimerId);
+                lobbyPlayLabel.textContent = 'TEAM READY';
             }
         }
 
-        function failGameRound() {
-            gameScore = 0;
-            gameIndex = 0;
-            gameScoreDisplay.innerText = '0 / 20';
-            gameQuestionText.innerText = 'Wrong answer. Start again.';
-            gameBubbles.innerHTML = '';
-            gameRunning = false;
-            document.getElementById('game-play-btn').innerText = 'PLAY AGAIN';
+        /* --- Game-type picker --- */
+        function layoutLobbyCards() {
+            const cards = lobbyStage.querySelectorAll('.mode-card');
+            const n = cards.length;
+            cards.forEach((card, i) => {
+                const rel = (i - lobbyTypeView + n) % n;
+                card.classList.toggle('is-center', rel === 0);
+                card.classList.toggle('is-right', rel === 1);
+                card.classList.toggle('is-left', rel === n - 1);
+                card.classList.toggle('is-back', rel !== 0 && rel !== 1 && rel !== n - 1);
+            });
         }
+
+        function setLobbyTypeTitle(step) {
+            lobbyTypeTitle.textContent = LOBBY_TYPES[lobbyTypeView].name;
+            if (!step) return;
+            lobbyTypeTitle.style.setProperty('--dir', step > 0 ? 1 : -1);
+            lobbyTypeTitle.classList.remove('swap');
+            void lobbyTypeTitle.offsetWidth;
+            lobbyTypeTitle.classList.add('swap');
+        }
+
+        function rotateLobbyType(step) {
+            if (lobbyTypeLocked) return;
+            lobbyTypeLocked = true;
+            lobbyTypeView = (lobbyTypeView + step + LOBBY_TYPES.length) % LOBBY_TYPES.length;
+            layoutLobbyCards();
+            setLobbyTypeTitle(step);
+            setTimeout(() => { lobbyTypeLocked = false; }, 380);
+        }
+
+        function openLobbyTypes() {
+            if (lobbySearching) return;
+            lobbyTypeView = lobbyType;
+            layoutLobbyCards();
+            setLobbyTypeTitle(0);
+            lobbyTypePage.classList.remove('hidden');
+            updateModeMetrics(lobbyStage);
+            lobbyStage.classList.remove('lit');
+            void lobbyStage.offsetWidth;
+            setTimeout(() => lobbyStage.classList.add('lit'), 150);
+        }
+
+        function closeLobbyTypes() {
+            lobbyTypePage.classList.add('hidden');
+            lobbyStage.classList.remove('lit');
+        }
+
+        function selectLobbyType() {
+            lobbyType = lobbyTypeView;
+            document.getElementById('lobby-type-name').textContent = LOBBY_TYPES[lobbyType].name;
+            document.getElementById('lobby-type-img').src = LOBBY_TYPES[lobbyType].img;
+            closeLobbyTypes();
+        }
+
+        (function initLobby() {
+            document.getElementById('lobby-cancel-icon').innerHTML = ICON_X;
+            document.getElementById('lobby-prev-icon').innerHTML = ICON_CHEVRON_LEFT;
+            document.getElementById('lobby-next-icon').innerHTML = ICON_CHEVRON_RIGHT;
+            let startX = null;
+            let swiped = false;
+            lobbyStage.addEventListener('pointerdown', e => { startX = e.clientX; });
+            lobbyStage.addEventListener('pointerup', e => {
+                if (startX === null) return;
+                const dx = e.clientX - startX;
+                startX = null;
+                if (Math.abs(dx) > 45) {
+                    swiped = true;
+                    setTimeout(() => { swiped = false; }, 0);
+                    rotateLobbyType(dx < 0 ? 1 : -1);
+                }
+            });
+            lobbyStage.addEventListener('click', e => {
+                if (swiped) return;
+                const card = e.target.closest('.mode-card');
+                if (!card) return;
+                if (card.classList.contains('is-left')) rotateLobbyType(-1);
+                else if (card.classList.contains('is-right')) rotateLobbyType(1);
+            });
+            document.addEventListener('keydown', e => {
+                if (lobbyTypePage.classList.contains('hidden')) return;
+                if (e.key === 'ArrowRight') rotateLobbyType(1);
+                else if (e.key === 'ArrowLeft') rotateLobbyType(-1);
+                else if (e.key === 'Enter') selectLobbyType();
+                else if (e.key === 'Escape') closeLobbyTypes();
+            });
+            resetLobbyPlayers();
+            renderLobbySlots();
+        })();
 
         function toggleMute() {
             bgMusic.muted = !bgMusic.muted;
@@ -2535,7 +2494,7 @@
             quizScreen.classList.add('hidden');
             essayScreen.classList.add('hidden');
             resultScreen.classList.add('hidden');
-            gamesPage.classList.add('hidden');
+            closeLobby();
             adminPanelPage.classList.add('hidden');
             usersPage.classList.add('hidden');
             historyPage.classList.remove('hidden');
@@ -2625,7 +2584,6 @@
                 start_subtitle: "English quiz (15 sec per question) + Final essay (20 minutes)", start_button: "START QUIZ", mode_start: "START",
                 menu_title: "Menu", menu_home: "Home", menu_toggle_sound: "Toggle Sound", menu_theme_label: "Design", menu_rename: "Rename", menu_promo: "Promo Code", menu_games: "Games",
                 menu_admin_panel: "Admin Panel", menu_restart: "Restart",
-                games_button: "GAMES",
                 design_modal_title: "Choose Design", design_modal_subtitle: "Pick a look for the site.",
                 essay_title: "Final Task: Historical Essay", essay_submit: "SUBMIT & SAVE ESSAY",
                 result_play_again: "PLAY AGAIN", result_view_result: "View Result", result_download_essay: "Download Essay",
@@ -2647,7 +2605,6 @@
                 start_subtitle: "Ағылшын тіліндегі тест (сұраққа 15 сек) + Соңғы эссе (20 минут)", start_button: "ТЕСТТІ БАСТАУ", mode_start: "БАСТАУ",
                 menu_title: "Мәзір", menu_home: "Главный", menu_toggle_sound: "Дыбысты қосу/өшіру", menu_theme_label: "Дизайн", menu_rename: "Атын өзгерту", menu_promo: "Промокод", menu_games: "Ойындар",
                 menu_admin_panel: "Админ панелі", menu_restart: "Қайта бастау",
-                games_button: "ОЙЫНДАР",
                 design_modal_title: "Дизайн таңдау", design_modal_subtitle: "Сайтқа ұнайтын көріністі таңдаңыз.",
                 essay_title: "Соңғы тапсырма: тарихи эссе", essay_submit: "ЭССЕНІ ЖІБЕРУ",
                 result_play_again: "ҚАЙТА ОЙНАУ", result_view_result: "Нәтижені көру", result_download_essay: "Эссені жүктеп алу",
@@ -2669,7 +2626,6 @@
                 start_subtitle: "Тест на английском (15 сек на вопрос) + Финальное эссе (20 минут)", start_button: "НАЧАТЬ ТЕСТ", mode_start: "СТАРТ",
                 menu_title: "Меню", menu_home: "Главный", menu_toggle_sound: "Вкл/выкл звук", menu_theme_label: "Дизайн", menu_rename: "Изменить имя", menu_promo: "Промокод", menu_games: "Игры",
                 menu_admin_panel: "Админ-панель", menu_restart: "Начать заново",
-                games_button: "ИГРЫ",
                 design_modal_title: "Выбор дизайна", design_modal_subtitle: "Выберите оформление сайта.",
                 essay_title: "Финальное задание: историческое эссе", essay_submit: "ОТПРАВИТЬ ЭССЕ",
                 result_play_again: "ИГРАТЬ СНОВА", result_view_result: "Посмотреть результат", result_download_essay: "Скачать эссе",
