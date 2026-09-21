@@ -3624,6 +3624,172 @@ html, body {
     color: #1a1200;
 }
 
+/* Round AI switch at the right end of the mode block */
+.lobby-ai {
+    flex: 0 0 auto;
+    align-self: center;
+    width: 30px;
+    height: 30px;
+    margin: 0 8px 0 4px;
+    padding: 0;
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.lobby-ai.on {
+    background: var(--accent-orange);
+    border-color: var(--accent-orange);
+    color: #1a1200;
+}
+
+.lobby-ai.locked {
+    opacity: 0.55;
+}
+
+/* Invite button on every player of the ONLINE list */
+.lobby-online-user b {
+    flex: 1 1 auto;
+}
+
+.lobby-invite-btn {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid var(--accent-orange);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--accent-orange);
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.lobby-invite-btn:hover {
+    background: var(--accent-orange);
+    color: #1a1200;
+}
+
+.lobby-invite-btn.sent {
+    border-color: #22c55e;
+    color: #22c55e;
+    cursor: default;
+}
+
+.lobby-invite-btn.sent:hover {
+    background: transparent;
+    color: #22c55e;
+}
+
+.lobby-invite-btn.off {
+    opacity: 0.35;
+    border-color: var(--glass-border);
+    color: var(--muted);
+}
+
+.lobby-invite-btn.off:hover {
+    background: transparent;
+    color: var(--muted);
+}
+
+/* Invitations and short messages */
+.lobby-invites {
+    position: absolute;
+    top: 96px;
+    right: 22px;
+    z-index: 6;
+    width: min(290px, calc(100vw - 44px));
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.lobby-invite,
+.lobby-toast {
+    pointer-events: auto;
+    color: var(--text);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid var(--accent-orange);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px var(--shadow-color);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    animation: lobbyToastIn 0.25s ease;
+}
+
+.lobby-toast {
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+}
+
+.lobby-invite {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px 9px 12px;
+}
+
+.lobby-invite > div {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.lobby-invite b {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.82rem;
+}
+
+.lobby-invite small {
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+}
+
+.lobby-invite button {
+    flex: 0 0 auto;
+    height: 30px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+}
+
+.lobby-invite .join {
+    background: var(--accent-orange);
+    color: #1a1200;
+}
+
+.lobby-invite .no {
+    padding: 0 9px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--glass-border);
+}
+
+@keyframes lobbyToastIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+}
+
 .lobby-play {
     position: relative;
     height: 68px;
@@ -3761,6 +3927,13 @@ html, body {
 }
 
 @media (max-width: 560px) {
+    .lobby-invites {
+        top: auto;
+        right: 12px;
+        bottom: 232px;
+        width: calc(100vw - 24px);
+    }
+
     .lobby-online {
         top: 78px;
         left: 12px;

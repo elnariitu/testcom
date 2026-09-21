@@ -76,6 +76,7 @@
             function submit(p, index, ms) {
                 if (closed || answered[p.id] !== undefined) return;
                 answered[p.id] = index;
+                if (p.isYou) ctx.emit('ans', { r: round, i: index, ms });
                 const ok = index === q.correct;
                 const speed = Math.round(500 * Math.max(0, 1 - ms / (LIMIT * 1000)));
                 const pts = ctx.award(p.id, ok, 500 + speed, ms);
@@ -130,6 +131,8 @@
                 const index = i >= 0 ? i : n;
                 if (index >= 0 && !closed && answered[me.id] === undefined) submit(me, index, ctx.clock.t - startedAt);
             });
+            ctx.onRemote('ans', (p, b) => submit(p, b.i, b.ms));
+            ctx.onReplaced(p => { const tag = stage.querySelector(`.ar-lane[data-id="${p.id}"] .ar-tag`); if (tag) tag.textContent = p.name; });
             players.forEach(moveBall);
             meters();
             nextRound();
@@ -183,6 +186,7 @@
                 if (closed || answered[p.id]) return;
                 answered[p.id] = true;
                 choices[p.id] = value;
+                if (p.isYou) ctx.emit('ans', { r: round, v: value, ms });
                 const ok = value === item.t;
                 const speed = Math.round(500 * Math.max(0, 1 - ms / (limit * 1000)));
                 const pts = ctx.award(p.id, ok, 500 + speed, ms);
@@ -215,6 +219,7 @@
             sides.forEach(s => s.addEventListener('click', () => {
                 if (!closed && !answered[me.id]) submit(me, s.dataset.v === '1', ctx.clock.t - startedAt);
             }));
+            ctx.onRemote('ans', (p, b) => submit(p, !!b.v, b.ms));
             onKey(ctx, e => {
                 const k = e.key.toLowerCase();
                 if (['arrowleft', 'a', 't'].includes(k) && !closed && !answered[me.id]) submit(me, true, ctx.clock.t - startedAt);
@@ -283,6 +288,7 @@
             function guess(name, button) {
                 if (closed || done[me.id]) return;
                 const ok = name === fig.name;
+                ctx.emit('guess', { r: round, ok, st: unlocked, ms: ctx.clock.t - startedAt });
                 if (ok) {
                     done[me.id] = true;
                     ctx.award(me.id, true, POINTS[unlocked - 1], ctx.clock.t - startedAt);
@@ -307,7 +313,7 @@
                 ctx.cancel(timerHandle);
                 ctx.cancel(clueTimer);
                 plans.forEach(applyPlan);
-                if (!done[me.id]) ctx.award(me.id, false, 0, CLUE_MS * 4);
+                players.forEach(p => { if (!done[p.id]) { done[p.id] = true; ctx.award(p.id, false, 0, CLUE_MS * 4); } });
                 optBox.querySelectorAll('.wa-opt').forEach(b => { b.disabled = true; if (b.dataset.n === fig.name) b.classList.add('right'); });
                 sil.classList.add('reveal');
                 card.innerHTML = `<div class="name">${esc(fig.name)}</div><div class="years">${esc(fig.years)}</div><p>${esc(fig.fact)}</p>`;
@@ -318,6 +324,11 @@
             optBox.addEventListener('click', e => {
                 const btn = e.target.closest('.wa-opt');
                 if (btn && !btn.disabled) guess(btn.dataset.n, btn);
+            });
+            ctx.onRemote('guess', (p, b) => {
+                if (closed || done[p.id]) return;
+                if (b.ok) { done[p.id] = true; ctx.award(p.id, true, POINTS[Math.max(0, Math.min(3, (b.st || 1) - 1))], b.ms); }
+                else { ctx.stats[p.id].combo = 0; ctx.addScore(p.id, -200); }
             });
             nextRound();
         }
@@ -412,6 +423,7 @@
                         ctx.refresh();
                     }
                     stepBots(ok);
+                    ctx.emit('lvl', { level: ok ? level : level - 1, out: !ok, prize: ok ? prize(level) : safePrize(level) });
                     ctx.after(1500, () => {
                         if (!ok) {
                             ctx.stats[me.id].score = safePrize(level);
@@ -461,6 +473,12 @@
                 }
             }
 
+            ctx.onRemote('lvl', (p, b) => {
+                const s = ctx.stats[p.id];
+                s.score = b.prize; s.correct = b.level; s.total = b.level + (b.out ? 1 : 0); s.best = b.level;
+                ctx.refresh();
+            });
+            ctx.onReplaced(p => { botState[p.id] = { level: ctx.stats[p.id].correct, out: false }; });
             stage.querySelector('.mm-life').addEventListener('click', e => { const b = e.target.closest('button'); if (b) useLife(b.dataset.l); });
             ansBox.addEventListener('click', e => { const b = e.target.closest('.mm-ans'); if (b && !b.disabled) choose(Number(b.dataset.i)); });
             onKey(ctx, e => { const i = 'abcd'.indexOf(e.key.toLowerCase()); const b = ansBox.querySelector(`[data-i="${i}"]`); if (i >= 0 && b && !b.disabled) choose(i); });

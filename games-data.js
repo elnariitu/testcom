@@ -10,10 +10,24 @@
         13: 'Independent Kazakhstan', 14: 'Independent Kazakhstan', 15: 'Independent Kazakhstan'
     };
 
+    /* Random source: Math.random normally, a seeded generator during an online match so every player gets the same rounds */
+    let rng = Math.random;
+
+    function seed(n) {
+        if (n === null || n === undefined) { rng = Math.random; return; }
+        let a = Number(n) >>> 0;
+        rng = function () {
+            a = (a + 0x6D2B79F5) | 0;
+            let t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+    }
+
     function shuffle(list) {
         const a = list.slice();
         for (let i = a.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
+            const j = Math.floor(rng() * (i + 1));
             [a[i], a[j]] = [a[j], a[i]];
         }
         return a;
@@ -218,5 +232,5 @@
         { s: 'Tokayev became President in 1991.', t: false, e: 'In 2019.' }
     ];
 
-    window.GameData = { shuffle, pickQuestions, timelineEvents, mapLocations, mapOutline, figures, statements };
+    window.GameData = { shuffle, seed, rand: () => rng(), pickQuestions, timelineEvents, mapLocations, mapOutline, figures, statements };
 })();

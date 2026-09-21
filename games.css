@@ -13,7 +13,8 @@
 }
 
 .game-page.hidden { display: none !important; }
-.game-page.paused * { animation-play-state: paused !important; }
+/* Freeze the game behind the pause menu, but never the menu itself (its fade-in would stay invisible) */
+.game-page.paused .gp-stage *, .game-page.paused .gp-hud *, .game-page.paused .gp-board * { animation-play-state: paused !important; }
 
 @media (min-width: 900px) {
     .game-page { left: 88px; width: calc(100vw - 88px); }
@@ -509,4 +510,14 @@
 @media (max-width: 560px) {
     .lobby-type-page .mode-card { width: 90%; }
     .lobby-type-page .mode-stage { height: 190px; }
+}
+
+/* Online pause note */
+.gp-note {
+    max-width: 260px;
+    margin: 0 auto 14px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    text-align: center;
 }

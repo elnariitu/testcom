@@ -145,6 +145,36 @@
         let rounds = 0;
         let ended = false;
 
+        /* Online match: other humans' actions arrive as events; `r` is the round they belong to */
+        const online = opts.online || null;
+        const handlers = {};
+        const buffered = [];
+        const finals = {};
+        const replaceHooks = [];
+        let curRound = 0;
+        let pollTimer = null;
+        let polling = false;
+
+        function dispatch(e) {
+            const p = players.find(x => x.slot === e.slot);
+            if (!p || p.isYou) return;
+            if (e.kind === 'final') { finals[p.slot] = e.body; return; }
+            if (e.kind === 'leave') { if (!finals[p.slot] && p.remote) ctx.replaceWithAI(p); return; }
+            if (!p.remote) return;
+            const b = e.body || {};
+            if (b.r !== undefined) {
+                if (b.r > curRound) { buffered.push(e); return; }
+                if (b.r < curRound) return;
+            }
+            const fn = handlers[e.kind];
+            if (fn) fn(p, b);
+        }
+
+        function flushRound() {
+            const waiting = buffered.splice(0);
+            waiting.forEach(e => dispatch(e));
+        }
+
         const ctx = {
             stage: refs.stage, players, me, stats, clock, game, opts,
             get paused() { return clock.paused; },
@@ -155,8 +185,37 @@
             el, esc, rand, pick, clamp, fmt, sfx: n => Sfx.play(n), confetti,
             shuffle: list => GameData.shuffle(list),
             questions: (n, o) => GameData.pickQuestions(n, o),
+            rng: () => GameData.rand(),
+            online: !!online,
+            emit(kind, body) { if (online) Net.emit(kind, body); },
+            onRemote(kind, fn) { handlers[kind] = fn; },
 
-            setRound(i, n) { rounds = n; refs.round.textContent = 'Round ' + i + ' / ' + n; },
+            startOnline() {
+                if (!online) return;
+                Net.resetEvents();
+                pollTimer = setInterval(async () => {
+                    if (polling) return;
+                    polling = true;
+                    const list = await Net.events();
+                    polling = false;
+                    list.forEach(dispatch);
+                }, 500);
+            },
+
+            /* A human left the match: an AI player takes over the place */
+            replaceWithAI(p) {
+                if (!p.remote) return;
+                p.remote = false;
+                p.bot = { acc: rand(0.55, 0.85), spd: rand(2.8, 5.5) };
+                const taken = players.map(x => x.name);
+                p.name = BOT_NAMES.filter(n => taken.indexOf(n) === -1)[0] || 'Rival';
+                p.replaced = true;
+                ctx.refresh();
+                replaceHooks.forEach(fn => { try { fn(p); } catch (e) {} });
+            },
+            onReplaced(fn) { replaceHooks.push(fn); },
+
+            setRound(i, n) { rounds = n; curRound = i; refs.round.textContent = 'Round ' + i + ' / ' + n; if (online) setTimeout(flushRound, 0); },
             setTime(sec) { refs.timer.textContent = mmss(sec); refs.timer.classList.toggle('urgent', sec <= 3 && sec > 0); },
             setTitle(text) { refs.round.textContent = text; },
 
@@ -220,11 +279,14 @@
             },
 
             pause() {
-                if (ended || clock.paused) return;
-                clock.paused = true;
-                page.classList.add('paused');
+                if (ended || clock.paused || refs.overlay.querySelector('.gp-panel')) return;
+                if (!online) {
+                    clock.paused = true;
+                    page.classList.add('paused');
+                }
                 refs.overlay.classList.remove('hidden');
                 refs.overlay.innerHTML = `<div class="gp-panel"><h2>PAUSED</h2>
+                    ${online ? '<p class="gp-note">Online match: the game keeps running for the others. If you quit, an AI player takes your place.</p>' : ''}
                     <button class="gp-btn primary" data-act="resume">RESUME</button>
                     <button class="gp-btn" data-act="quit">QUIT TO LOBBY</button></div>`;
                 refs.overlay.onclick = e => {
@@ -244,10 +306,30 @@
             finish() {
                 if (ended) return;
                 ended = true;
-                clock.after(600, () => showResults(ctx));
+                clock.after(600, () => {
+                    if (!online) { showResults(ctx); return; }
+                    refs.overlay.classList.remove('hidden');
+                    refs.overlay.onclick = null;
+                    refs.overlay.innerHTML = '<div class="gp-panel"><h2>WAITING FOR PLAYERS...</h2></div>';
+                    const s = stats[me.id];
+                    Net.emit('final', { score: Math.round(s.score), correct: s.correct, total: s.total, best: s.best, ms: s.ms });
+                    const started = Date.now();
+                    const wait = setInterval(() => {
+                        const pending = players.some(p => p.remote && !finals[p.slot]);
+                        if (pending && Date.now() - started < 8000) return;
+                        clearInterval(wait);
+                        players.forEach(p => {
+                            const f = finals[p.slot];
+                            if (f && p.remote) Object.assign(stats[p.id], { score: f.score, correct: f.correct, total: f.total, best: f.best, ms: f.ms });
+                        });
+                        Net.call('leave');
+                        showResults(ctx);
+                    }, 300);
+                });
             },
             destroy() {
                 ended = true;
+                clearInterval(pollTimer);
                 cleanups.forEach(fn => { try { fn(); } catch (e) {} });
                 clock.destroy();
             }
@@ -356,6 +438,7 @@
         get(id) { return registry.find(g => g.id === id); },
         config(h) { Object.assign(hooks, h); },
         colors: COLORS,
+        botNames(seed) { const start = Math.abs(Number(seed) || 0) % BOT_NAMES.length; return BOT_NAMES.map((_, i) => BOT_NAMES[(start + i) % BOT_NAMES.length]); },
 
         /* Builds the player list for a match. `names` are the found players from the lobby (you first). */
         makePlayers(size, names) {
@@ -383,23 +466,26 @@
             refs.stage.innerHTML = '';
             refs.overlay.classList.add('hidden');
             refs.overlay.innerHTML = '';
+            if (opts.online) GameData.seed(opts.online.seed);
             const ctx = makeContext(game, opts);
             current = { game, opts, ctx };
             ctx.setTitle(game.name.toUpperCase());
             ctx.setTime(0);
             ctx.refresh();
-            countdown(() => game.run(ctx));
+            countdown(() => { ctx.startOnline(); game.run(ctx); });
         },
 
         replay() {
             if (!current) return;
             const { game, opts } = current;
+            if (opts.online) { Games.stop(); hooks.onChangeGame(); return; }
             Games.launch(game.id, { size: opts.size, players: opts.players.map(p => ({ name: p.name, isYou: p.isYou, bot: p.bot ? { acc: rand(0.55, 0.88), spd: rand(2.6, 6) } : undefined })) });
         },
 
         stop() {
             if (!current) return;
             if (current.cancelCountdown) current.cancelCountdown();
+            if (current.opts.online) { Net.call('leave'); GameData.seed(null); }
             current.ctx.destroy();
             current = null;
             if (page) {

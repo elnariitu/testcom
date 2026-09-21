@@ -120,6 +120,7 @@
                 const perfect = good === n;
                 const ms = ctx.clock.t - startedAt;
                 const pts = grade(me.id, perfect, good, n, ms);
+                ctx.emit('done', { r: round, perfect, good, n, ms });
                 resolved[me.id] = { perfect };
                 plans.forEach(botDone);
                 ctx.sfx(perfect ? 'correct' : 'wrong');
@@ -179,6 +180,13 @@
             document.addEventListener('pointerup', onUp);
             ctx.onCleanup(() => { document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp); document.querySelectorAll('.tl-card.ghost').forEach(n => n.remove()); });
             checkBtn.addEventListener('click', () => { if (!checkBtn.disabled) finishRound(false); });
+            ctx.onRemote('done', (p, b) => {
+                if (closed && resolved[p.id]) return;
+                if (resolved[p.id]) return;
+                resolved[p.id] = { perfect: !!b.perfect };
+                grade(p.id, !!b.perfect, b.good, b.n, b.ms);
+                renderStatus();
+            });
             nextRound();
         }
     });
@@ -245,6 +253,7 @@
             function register(p, lonlat, ms) {
                 if (closed || clicks[p.id]) return;
                 clicks[p.id] = { lonlat, ms };
+                if (p.isYou) ctx.emit('click', { r: round, lon: lonlat[0], lat: lonlat[1], ms });
                 if (p.isYou) {
                     const [x, y] = proj(lonlat[0], lonlat[1]);
                     layer.insertAdjacentHTML('beforeend', pin(x, y, p.color, 'You', 'mine'));
@@ -288,6 +297,7 @@
                 const p = pt.matrixTransform(svg.getScreenCTM().inverse());
                 register(me, unproj(p.x, p.y), ctx.clock.t - startedAt);
             });
+            ctx.onRemote('click', (p, b) => register(p, [b.lon, b.lat], b.ms));
             svg.addEventListener('mousemove', e => {
                 const pt = svg.createSVGPoint();
                 pt.x = e.clientX; pt.y = e.clientY;
@@ -360,6 +370,7 @@
             function choose(p, index, ms) {
                 if (closed || hp[p.id] <= 0 || answered[p.id] !== undefined) return;
                 answered[p.id] = { index, ms };
+                if (p.isYou) ctx.emit('ans', { r: round, i: index, ms });
                 if (p.isYou) {
                     const btn = ansBox.querySelector(`[data-i="${index}"]`);
                     if (btn) btn.classList.add('picked');
@@ -430,10 +441,14 @@
             boostBtn.addEventListener('click', () => {
                 if (boostBtn.disabled) return;
                 boosted[me.id] = true;
+                ctx.emit('boost', { r: round });
                 ctx.sfx('boost');
                 paint();
             });
             onKey(ctx, e => { const i = 'abcd'.indexOf(e.key.toLowerCase()); if (i >= 0 && !ctx.paused && !closed) choose(me, i, ctx.clock.t - startedAt); });
+            ctx.onRemote('ans', (p, b) => choose(p, b.i, b.ms));
+            ctx.onRemote('boost', p => { if (!closed && power[p.id] >= 100) { boosted[p.id] = true; paint(); } });
+            ctx.onReplaced(p => { const n = node(p); if (n) n.querySelector('.du-name').innerHTML = `${esc(p.name)} <em>AI</em>`; });
             nextRound();
         }
     });
@@ -458,7 +473,8 @@
             const joy = stage.querySelector('.ca-joy');
             const knob = joy.querySelector('.knob');
 
-            const pos = {}, target = {}, frozenUntil = {}, boostUntil = {}, delayUntil = {};
+            const pos = {}, target = {}, frozenUntil = {}, boostUntil = {}, delayUntil = {}, remoteAt = {};
+            let lastSent = 0, currentRound = 0;
             let round = 0, q = null, W = 1, H = 1, closed = true, timerHandle = null, keys = {}, joyVec = [0, 0], orb = null, lastFrame = 0, raf = 0, locking = false;
 
             const zoneEl = i => arena.querySelector(`.z${i}`);
@@ -471,12 +487,14 @@
             function nextRound() {
                 if (round >= ROUNDS) return ctx.finish();
                 q = questions[round++];
+                currentRound = round;
                 ctx.setRound(round, ROUNDS);
                 measure();
                 qBox.textContent = q.question;
                 q.answers.forEach((a, i) => { const z = zoneEl(i); z.querySelector('span').textContent = a; z.classList.remove('locked', 'right', 'wrong'); });
                 lockEl.classList.add('hidden'); locking = false; closed = false;
                 players.forEach((p, i) => {
+                    delete remoteAt[p.id];
                     pos[p.id] = { x: W / 2 + (i - (players.length - 1) / 2) * 46, y: H / 2 };
                     frozenUntil[p.id] = 0; boostUntil[p.id] = 0;
                     const good = p.bot && ctx.botCorrect(p, q.difficulty);
@@ -492,7 +510,7 @@
             }
 
             function spawnOrb() {
-                orb = { type: Math.random() < 0.5 ? 'boost' : 'freeze', x: W * (0.3 + Math.random() * 0.4), y: H * (0.3 + Math.random() * 0.4) };
+                orb = { type: ctx.rng() < 0.5 ? 'boost' : 'freeze', x: W * (0.3 + ctx.rng() * 0.4), y: H * (0.3 + ctx.rng() * 0.4) };
                 orbEl.className = 'ca-orb ' + orb.type;
                 orbEl.textContent = orb.type === 'boost' ? '⚡' : '❄';
                 orbEl.style.left = orb.x + 'px';
@@ -531,6 +549,20 @@
                     if (ctx.clock.t < frozenUntil[p.id]) { charEl(p).classList.add('frozen'); return; }
                     charEl(p).classList.remove('frozen');
                     let vx = 0, vy = 0;
+                    if (p.remote) {
+                        const goal = remoteAt[p.id];
+                        if (goal) {
+                            const k = Math.min(1, dt * 9);
+                            cur.x += (goal.x - cur.x) * k;
+                            cur.y += (goal.y - cur.y) * k;
+                            const elr = charEl(p);
+                            elr.style.transform = `translate(${cur.x - 18}px, ${cur.y - 18}px)`;
+                            const zr = zoneAt(cur.x, cur.y);
+                            if (zr !== -1 && !elr.dataset.z) { elr.classList.remove('hop'); void elr.offsetWidth; elr.classList.add('hop'); }
+                            elr.dataset.z = zr === -1 ? '' : String(zr);
+                        }
+                        return;
+                    }
                     if (p.isYou) {
                         vx = (keys.arrowright || keys.d ? 1 : 0) - (keys.arrowleft || keys.a ? 1 : 0) + joyVec[0];
                         vy = (keys.arrowdown || keys.s ? 1 : 0) - (keys.arrowup || keys.w ? 1 : 0) + joyVec[1];
@@ -549,6 +581,10 @@
                     const el = charEl(p);
                     el.style.transform = `translate(${cur.x - 18}px, ${cur.y - 18}px)`;
                     el.classList.toggle('run', len > 0.05);
+                    if (p.isYou && ctx.online && ctx.clock.t - lastSent > 150) {
+                        lastSent = ctx.clock.t;
+                        ctx.emit('pos', { r: currentRound, x: +(cur.x / W).toFixed(4), y: +(cur.y / H).toFixed(4) });
+                    }
                     const after = zoneAt(cur.x, cur.y);
                     if (after !== before && after !== -1) { el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); }
                     if (orb && Math.hypot(cur.x - orb.x, cur.y - orb.y) < 30) {
@@ -579,6 +615,8 @@
             joy.addEventListener('pointerup', joyEnd);
             joy.addEventListener('pointercancel', joyEnd);
             window.addEventListener('resize', measure);
+            ctx.onRemote('pos', (p, b) => { if (!closed) remoteAt[p.id] = { x: b.x * W, y: b.y * H }; });
+            ctx.onReplaced(p => { const c = charEl(p); if (c) c.querySelector('em').textContent = p.name; delete remoteAt[p.id]; target[p.id] = Math.floor(Math.random() * 4); delayUntil[p.id] = ctx.clock.t + 900; });
             ctx.onCleanup(() => { cancelAnimationFrame(raf); window.removeEventListener('resize', measure); });
             raf = requestAnimationFrame(step);
             nextRound();
