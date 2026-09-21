@@ -1,0 +1,22 @@
+# Local secrets and deploy state - never commit
+.deploy.env
+testcom.local.php
+.deploystate
+.deploy-backups/
+
+# macOS junk
+.DS_Store
+__MACOSX/
+
+# Old copies / empty placeholders
+*.previous
+*.backup
+*.liquid
+*.v[0-9]*
+*.zip
+
+# Audio is deployed by FTP only (not stored in the public repo)
+Music/
+
+# Older static variant; the site is served from index.php
+index.html
