@@ -2591,15 +2591,6 @@ body.admin-copy-enabled * {
     font-size: clamp(1.25rem, 3vw, 2rem);
 }
 
-.home-games-btn {
-    margin-top: 26px;
-}
-
-.home-games-btn .icon-svg svg {
-    width: 1.25rem;
-    height: 1.25rem;
-}
-
 @media (min-width: 900px) {
     body {
         padding-left: 88px;
@@ -2933,5 +2924,241 @@ body.admin-copy-enabled .maten-watermark * {
 @media (min-width: 900px) {
     .maten-watermark {
         left: 102px;
+    }
+}
+
+/* ---------- Home: mode carousel ---------- */
+.container:has(#start-screen:not(.hidden)) {
+    max-width: 1000px;
+    padding: 0;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.container:has(#start-screen:not(.hidden))::before {
+    display: none;
+}
+
+.mode-carousel {
+    position: relative;
+    margin: 12px auto 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.mode-stage {
+    position: relative;
+    width: 100%;
+    height: clamp(240px, 46vw, 400px);
+    touch-action: pan-y;
+}
+
+.mode-card {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(58%, 420px);
+    height: calc(100% - 34px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+    transition: transform 0.55s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.55s ease, filter 0.55s ease;
+    will-change: transform, opacity, filter;
+    cursor: pointer;
+}
+
+.mode-card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.mode-card.is-center {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+    filter: none;
+    z-index: 3;
+    cursor: default;
+}
+
+.mode-card.is-left {
+    transform: translateX(calc(-50% - 78%)) scale(0.58);
+    opacity: 0.7;
+    filter: blur(5px);
+    z-index: 2;
+}
+
+.mode-card.is-right {
+    transform: translateX(calc(-50% + 78%)) scale(0.58);
+    opacity: 0.7;
+    filter: blur(5px);
+    z-index: 2;
+}
+
+.mode-card.is-back {
+    transform: translateX(-50%) scale(0.35);
+    opacity: 0;
+    filter: blur(10px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Flat, rounded ground shadow under the centered picture */
+.mode-shadow {
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: min(50%, 360px);
+    height: 28px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.32) 45%, rgba(0, 0, 0, 0) 72%);
+    filter: blur(3px);
+    transition: transform 0.45s ease, opacity 0.45s ease;
+    z-index: 0;
+}
+
+.mode-stage.rotating .mode-shadow {
+    transform: translateX(-50%) scaleX(0.82);
+    opacity: 0.8;
+}
+
+.mode-arrow {
+    position: absolute;
+    top: calc(50% - 17px);
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    box-shadow: 0 6px 16px var(--shadow-color);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.mode-arrow:hover {
+    transform: translateY(-50%) scale(1.08);
+    filter: brightness(1.1);
+}
+
+.mode-arrow:active {
+    transform: translateY(-50%) scale(0.94);
+}
+
+.mode-arrow svg {
+    width: 26px;
+    height: 26px;
+}
+
+.mode-arrow-left {
+    left: 6px;
+}
+
+.mode-arrow-right {
+    right: 6px;
+}
+
+.mode-start-btn {
+    display: flex;
+    margin: 14px auto 0;
+    min-width: 220px;
+}
+
+/* ---------- Week picker drum ---------- */
+.week-picker-card {
+    max-width: 380px;
+    padding-bottom: 24px;
+}
+
+.wheel {
+    position: relative;
+    height: 260px;
+    margin: 12px 0 6px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
+}
+
+.wheel-band {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 50%;
+    height: 52px;
+    transform: translateY(-50%);
+    border-radius: 14px;
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    box-shadow: inset 0 0 0 1px rgba(255, 106, 0, 0.25);
+    pointer-events: none;
+}
+
+.wheel-scroll {
+    position: absolute;
+    inset: 0;
+    padding: 104px 0;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+    outline: none;
+    cursor: grab;
+}
+
+.wheel-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.wheel-item {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+    will-change: transform, opacity, filter;
+}
+
+.wheel-item.active {
+    color: var(--accent-orange);
+}
+
+.wheel-caption {
+    min-height: 2.4em;
+    margin: 4px 0 14px;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+@media (max-width: 560px) {
+    .mode-card {
+        width: min(64%, 420px);
+    }
+
+    .mode-arrow {
+        width: 42px;
+        height: 42px;
+    }
+
+    .mode-start-btn {
+        min-width: 200px;
     }
 }

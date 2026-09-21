@@ -31,10 +31,10 @@ STATE_FILE = os.path.join(LOCAL_DIR, ".deploystate")
 BACKUP_ROOT = os.path.join(LOCAL_DIR, ".deploy-backups")
 
 # Not uploaded to the server (junk, local tooling, secrets).
-EXCLUDE_DIRS = {".git", ".claude", "__MACOSX", ".deploy-backups", "node_modules", ".idea", ".vscode"}
+EXCLUDE_DIRS = {".git", ".claude", "content", "__MACOSX", ".deploy-backups", "node_modules", ".idea", ".vscode"}
 EXCLUDE_FILES = [
     ".DS_Store", ".gitignore", ".deploy.env", ".deploystate",
-    "deploy.py", "README.md", "index.html", "*.previous", "*.backup", "*.liquid", "*.zip", "*.log",
+    "deploy.py", "build_weekly.py", "README.md", "index.html", "*.previous", "*.backup", "*.liquid", "*.zip", "*.log",
     "*.v[0-9]*",
 ]
 
@@ -225,6 +225,13 @@ def main():
 
     log("Testcom deploy  %s%s" % (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "  [DRY RUN]" if dry_run else ""))
     ok = True
+    builder = os.path.join(LOCAL_DIR, "build_weekly.py")
+    if os.path.isfile(builder):
+        built = subprocess.run([sys.executable, builder], cwd=LOCAL_DIR, capture_output=True, text=True)
+        log("weekly: " + (built.stdout or built.stderr).strip())
+        if built.returncode != 0:
+            log("Finished WITH PROBLEMS (weekly-tests.js was not built, nothing was published).")
+            return 1
     if "--no-git" not in flags:
         ok = publish_git(message, dry_run) and ok
     if "--no-ftp" not in flags:
