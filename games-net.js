@@ -102,4 +102,17 @@
     };
 
     window.Net = Net;
+
+    /* Points a finished game gave the signed-in player (the server checks who they are and caps the amount) */
+    window.Points = {
+        submit(game, points) {
+            if (!(points > 0)) return;
+            try {
+                fetch('points.php?action=submit', {
+                    method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game, points: Math.round(points) })
+                }).catch(() => {});
+            } catch (e) { /* offline: points are simply not counted */ }
+        }
+    };
 })();

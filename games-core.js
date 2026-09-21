@@ -372,6 +372,7 @@
         const before = readXP();
         const gained = Math.round(mine.score);
         writeXP(before + gained);
+        if (window.Points && current) Points.submit(current.game.id, gained);
         const level = xp => Math.floor(xp / XP_PER_LEVEL) + 1;
         const pct = xp => (xp % XP_PER_LEVEL) / XP_PER_LEVEL * 100;
         const ordinal = n => ['1st', '2nd', '3rd', '4th'][n - 1] || n + 'th';
