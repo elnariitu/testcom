@@ -31,7 +31,7 @@ STATE_FILE = os.path.join(LOCAL_DIR, ".deploystate")
 BACKUP_ROOT = os.path.join(LOCAL_DIR, ".deploy-backups")
 
 # Not uploaded to the server (junk, local tooling, secrets).
-EXCLUDE_DIRS = {".git", "__MACOSX", ".deploy-backups", "node_modules", ".idea", ".vscode"}
+EXCLUDE_DIRS = {".git", ".claude", "__MACOSX", ".deploy-backups", "node_modules", ".idea", ".vscode"}
 EXCLUDE_FILES = [
     ".DS_Store", ".gitignore", ".deploy.env", ".deploystate",
     "deploy.py", "README.md", "index.html", "*.previous", "*.backup", "*.liquid", "*.zip", "*.log",

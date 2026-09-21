@@ -4,6 +4,9 @@ testcom.local.php
 .deploystate
 .deploy-backups/
 
+# Local tooling
+.claude/
+
 # macOS junk
 .DS_Store
 __MACOSX/

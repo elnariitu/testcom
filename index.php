@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no, email=no, address=no">
     <title>Kazakhstan History Quiz & Essay</title>
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=37">
 </head>
 <body>
+
+    <!-- Decorative watermark: not a link, not clickable -->
+    <div class="maten-watermark" aria-hidden="true">
+        <img src="maten-logo.png" alt="" width="26" height="26" draggable="false">
+        <div class="maten-watermark-text">
+            <span class="maten-watermark-by">by Maten services</span>
+            <span class="maten-watermark-url">https://maten.pro</span>
+        </div>
+    </div>
 
     <audio id="bg-music" src="Music/General.mp3" loop preload="auto"></audio>
 
