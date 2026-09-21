@@ -5,9 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no, email=no, address=no">
     <title>Kazakhstan History Quiz & Essay</title>
-    <link rel="stylesheet" href="style.css?v=41">
+    <link rel="stylesheet" href="style.css?v=45">
 </head>
 <body>
+
+    <!-- Loading screen: stays until the pictures are ready -->
+    <div class="site-loader" id="site-loader" role="status" aria-live="polite">
+        <div class="loader-inner">
+            <div class="loader-ring"></div>
+            <div class="loader-title">Kazakhstan History</div>
+            <div class="loader-text">Loading<span class="loader-dots"><i>.</i><i>.</i><i>.</i></span></div>
+            <div class="loader-bar"><span id="loader-bar-fill"></span></div>
+        </div>
+    </div>
 
     <!-- Decorative watermark: not a link, not clickable -->
     <div class="maten-watermark" aria-hidden="true">
@@ -219,9 +229,9 @@
                     <span class="design-preview preview-mono"></span>
                     <span class="design-info"><strong>Mono</strong><span>Sharp black and white</span></span>
                 </button>
-                <button class="design-option" id="theme-swatch-mint" onclick="setDesignTheme('mint')">
-                    <span class="design-preview preview-mint"></span>
-                    <span class="design-info"><strong>Mint</strong><span>Fresh mint and rose</span></span>
+                <button class="design-option" id="theme-swatch-kahoot" onclick="setDesignTheme('kahoot')">
+                    <span class="design-preview preview-kahoot"></span>
+                    <span class="design-info"><strong>Kahoot</strong><span>Purple stage, bold colourful tiles</span></span>
                 </button>
             </div>
         </div>
@@ -277,6 +287,7 @@
             <div class="mode-carousel" id="mode-carousel">
                 <button class="mode-arrow mode-arrow-left" onclick="rotateMode(-1)" aria-label="Previous mode"><span class="icon-svg" id="mode-prev-icon"></span></button>
                 <div class="mode-stage" id="mode-stage">
+                    <div class="mode-glow" aria-hidden="true"></div>
                     <div class="mode-shadow"></div>
                     <div class="mode-card" data-mode="quiz"><img src="assets/quiz.png" alt="Quiz" draggable="false"></div>
                     <div class="mode-card" data-mode="essay"><img src="assets/essay.png" alt="Essay" draggable="false"></div>
@@ -286,6 +297,14 @@
                 <button class="mode-arrow mode-arrow-right" onclick="rotateMode(1)" aria-label="Next mode"><span class="icon-svg" id="mode-next-icon"></span></button>
             </div>
             <button class="btn mode-start-btn" id="mode-start-btn" onclick="startSelectedMode()" data-i18n="mode_start">START</button>
+            <div class="resume-note hidden" id="resume-note">
+                <p>Your test was not finished. Continue?</p>
+                <small id="resume-note-detail"></small>
+                <div class="resume-actions">
+                    <button class="btn" onclick="resumeUnfinished()">Continue</button>
+                    <button class="btn btn-secondary" onclick="askDiscardUnfinished()">Delete</button>
+                </div>
+            </div>
         </div>
 
         <!-- Essay -->
@@ -574,6 +593,21 @@
         });
         ['gesturestart', 'gesturechange', 'gestureend'].forEach(eventName => {
             document.addEventListener(eventName, e => e.preventDefault(), { passive: false });
+        });
+        /* Two-finger pinch and double-tap zoom (iOS Safari ignores user-scalable=no) */
+        document.addEventListener('touchmove', e => {
+            if (e.touches.length > 1) e.preventDefault();
+        }, { passive: false });
+        let lastTouchEndAt = 0;
+        document.addEventListener('touchend', e => {
+            const now = Date.now();
+            const onControl = e.target.closest && e.target.closest('button, a, input, textarea, select, label, .mode-card, .wheel-scroll, .history-row');
+            if (now - lastTouchEndAt < 320 && !onControl) e.preventDefault();
+            lastTouchEndAt = now;
+        }, { passive: false });
+        document.addEventListener('dblclick', e => {
+            if (canAdminCopyText() || isTypingField(e.target)) return;
+            e.preventDefault();
         });
 
         /* Best-effort block of View Source / DevTools shortcuts. Modern Chrome/Firefox
@@ -887,6 +921,152 @@
             syncAccountBarVisibility();
             syncFinishButtonVisibility();
         }
+
+        /* ---------- Unfinished test: saved in this browser so it can be continued ---------- */
+        const RUN_KEY = 'testcomUnfinishedRun';
+        let runActive = false;
+        let runPhase = 'quiz';
+        let pendingUnfinishedDelete = false;
+
+        function readSavedRun() {
+            try {
+                const raw = localStorage.getItem(RUN_KEY);
+                if (!raw) return null;
+                const data = JSON.parse(raw);
+                return data && data.v === 1 && Array.isArray(data.questions) ? data : null;
+            } catch (e) { return null; }
+        }
+
+        function saveRun() {
+            if (!runActive) return;
+            try {
+                localStorage.setItem(RUN_KEY, JSON.stringify({
+                    v: 1,
+                    mode: runMode,
+                    week: runWeek,
+                    hasEssay: runHasEssay,
+                    essayTopic: runEssayTopic,
+                    phase: runPhase,
+                    questions: quizDatabase,
+                    index: currentQuestionIndex,
+                    score,
+                    states: questionRenderState,
+                    essayText: essayInput.value,
+                    essayTimeLeft,
+                    savedAt: Date.now()
+                }));
+            } catch (e) {}
+        }
+
+        function clearRun() {
+            runActive = false;
+            try { localStorage.removeItem(RUN_KEY); } catch (e) {}
+            refreshResumeNote();
+        }
+
+        function describeSavedRun(saved) {
+            const week = String(saved.week || '').padStart(2, '0');
+            const name = saved.mode === 'week' ? 'Weekly Test - Week ' + week
+                : saved.mode === 'essay' ? 'Essay - Week ' + week : 'Quiz';
+            if (saved.phase === 'essay') {
+                return name + ' - essay, ' + countWords(saved.essayText || '') + ' words written';
+            }
+            const done = (saved.states || []).filter(st => st && st.answered).length;
+            return name + ' - ' + done + ' / ' + saved.questions.length + ' questions answered';
+        }
+
+        function refreshResumeNote() {
+            const note = document.getElementById('resume-note');
+            const saved = readSavedRun();
+            note.classList.toggle('hidden', !saved);
+            if (saved) document.getElementById('resume-note-detail').textContent = describeSavedRun(saved);
+        }
+
+        function resumeUnfinished() {
+            const saved = readSavedRun();
+            if (!saved) { refreshResumeNote(); return; }
+            if (menuOpen) toggleMenu();
+            runMode = saved.mode;
+            runWeek = saved.week;
+            runHasEssay = !!saved.hasEssay;
+            runEssayTopic = saved.essayTopic || '';
+            quizDatabase = saved.questions;
+            currentQuestionIndex = saved.index || 0;
+            score = saved.score || 0;
+            questionRenderState = saved.states || [];
+            reviewIndex = null;
+            userEssayText = '';
+            quizEndStatus = 'completed';
+            startScreen.classList.add('hidden');
+            historyPage.classList.add('hidden');
+            syncAccountBarVisibility();
+            startTestGuardSession();
+            runActive = true;
+            if (saved.phase === 'essay') {
+                startEssaySection({ essayText: saved.essayText, essayTimeLeft: saved.essayTimeLeft || 20 * 60 });
+                return;
+            }
+            runPhase = 'quiz';
+            quizScreen.classList.remove('hidden');
+            syncFinishButtonVisibility();
+            const state = questionRenderState[currentQuestionIndex];
+            if (state && !state.answered) {
+                renderCurrentLiveState();
+                updateNavButtons();
+                startTimer();
+            } else {
+                if (state && state.answered) currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function askDiscardUnfinished() {
+            if (!readSavedRun()) { refreshResumeNote(); return; }
+            pendingUnfinishedDelete = true;
+            pendingHistoryDeleteIds = [];
+            document.getElementById('history-delete-title').innerText = 'Delete the unfinished test?';
+            document.getElementById('history-delete-subtext').innerText = 'Your progress will be lost.';
+            document.getElementById('history-delete-overlay').classList.remove('hidden');
+        }
+
+        function renderUnfinishedCard() {
+            const old = historyList.querySelector('.history-pinned');
+            if (old) old.remove();
+            const saved = readSavedRun();
+            if (!saved) return;
+            const empty = historyList.querySelector('.history-empty');
+            if (empty && historyList.children.length === 1) empty.remove();
+            const card = document.createElement('div');
+            card.className = 'history-row history-card history-pinned';
+            card.tabIndex = 0;
+            card.setAttribute('role', 'button');
+            card.innerHTML = `
+                <div class="history-card-body">
+                    <div class="history-card-head">
+                        <strong>${escapeHtml(describeSavedRun(saved))}</strong>
+                        <span class="history-badge">Unfinished</span>
+                    </div>
+                    <div class="history-card-meta">Started ${escapeHtml(new Date(saved.savedAt || Date.now()).toLocaleString())}</div>
+                    <button type="button" class="btn history-card-continue">Continue</button>
+                </div>
+                <button type="button" class="history-trash-btn" aria-label="Delete the unfinished test">${ICON_TRASH}</button>
+            `;
+            card.addEventListener('click', resumeUnfinished);
+            card.addEventListener('keydown', e => { if (e.key === 'Enter') resumeUnfinished(); });
+            card.querySelector('.history-trash-btn').addEventListener('click', e => {
+                e.stopPropagation();
+                askDiscardUnfinished();
+            });
+            historyList.prepend(card);
+        }
+
+        /* Save right before the page is hidden or closed */
+        document.addEventListener('visibilitychange', () => { if (document.hidden) saveRun(); });
+        window.addEventListener('pagehide', saveRun);
+        essayInput.addEventListener('input', (() => {
+            let timer = null;
+            return () => { clearTimeout(timer); timer = setTimeout(saveRun, 800); };
+        })());
 
         /* ---------- Home: mode carousel (Quiz / Essay / Weekly Test / Game) ---------- */
         const MODES = ['quiz', 'essay', 'week', 'game'];
@@ -1480,6 +1660,8 @@
             quizEndStatus = 'completed';
             startTestGuardSession();
             syncFinishButtonVisibility();
+            runActive = true;
+            runPhase = 'quiz';
             loadQuestion();
         }
 
@@ -1501,6 +1683,7 @@
             let allAnswers = [currentQ.correctAnswer, ...currentQ.wrongAnswers];
             allAnswers.sort(() => Math.random() - 0.5);
             questionRenderState[currentQuestionIndex] = { allAnswers, selected: null, isCorrect: null, answered: false };
+            saveRun();
 
             renderCurrentLiveState();
             updateNavButtons();
@@ -1678,6 +1861,7 @@
             state.selected = null;
             state.isCorrect = false;
             state.answered = true;
+            saveRun();
             revealCorrectAnswer(currentQ.correctAnswer);
             showAnswerToast(false);
             setTimeout(() => {
@@ -1709,6 +1893,7 @@
                 showAnswerToast(false);
             }
             scoreDisplay.innerText = `Score: ${score}`;
+            saveRun();
 
             setTimeout(() => {
                 currentQuestionIndex++;
@@ -1716,7 +1901,8 @@
             }, ANSWER_REVEAL_DELAY);
         }
 
-        function startEssaySection() {
+        function startEssaySection(resume) {
+            clearInterval(essayTimer);
             quizScreen.classList.add('hidden');
             syncFinishButtonVisibility();
             essayScreen.classList.remove('hidden');
@@ -1724,13 +1910,17 @@
             const weekLabel = 'Week ' + String(runWeek).padStart(2, '0');
             document.getElementById('essay-title-text').textContent =
                 runMode === 'essay' ? weekLabel + ' Essay' : weekLabel + ': Final Essay';
-            essayTimeLeft = 20 * 60;
+            essayTimeLeft = resume ? resume.essayTimeLeft : 20 * 60;
             essaySubmitted = false;
-            essayInput.value = "";
+            essayInput.value = resume ? (resume.essayText || '') : '';
             updateWordCounter();
+            runActive = true;
+            runPhase = 'essay';
+            saveRun();
 
             essayTimer = setInterval(() => {
                 essayTimeLeft--;
+                if (essayTimeLeft % 5 === 0) saveRun();
                 let minutes = Math.floor(essayTimeLeft / 60);
                 let seconds = essayTimeLeft % 60;
                 essayTimerDisplay.innerText = `Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -1790,6 +1980,7 @@
         }
 
         function endQuiz() {
+            clearRun();
             stopTestGuardSession();
             essayScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
@@ -2149,6 +2340,8 @@
         function askDeleteHistory(ids) {
             const unique = [...new Set(ids)].filter(Boolean);
             if (unique.length === 0) return;
+            pendingUnfinishedDelete = false;
+            document.getElementById('history-delete-subtext').innerText = 'This cannot be undone.';
             pendingHistoryDeleteIds = unique;
             document.getElementById('history-delete-title').innerText =
                 unique.length === 1 ? 'Delete this test result?' : `Delete ${unique.length} test results?`;
@@ -2157,12 +2350,19 @@
 
         function closeHistoryDeleteConfirm() {
             pendingHistoryDeleteIds = [];
+            pendingUnfinishedDelete = false;
             document.getElementById('history-delete-overlay').classList.add('hidden');
         }
 
         async function confirmHistoryDelete() {
             const ids = pendingHistoryDeleteIds;
+            const discardRun = pendingUnfinishedDelete;
             closeHistoryDeleteConfirm();
+            if (discardRun) {
+                clearRun();
+                if (!historyPage.classList.contains('hidden')) loadTestHistory();
+                return;
+            }
             await deleteHistoryIds(ids);
             loadTestHistory();
         }
@@ -2179,6 +2379,11 @@
         }
 
         async function loadTestHistory() {
+            await loadServerHistory();
+            renderUnfinishedCard();
+        }
+
+        async function loadServerHistory() {
             const isGuest = !currentUserEmail || currentUserRole === 'guest';
             document.querySelector('.history-actions').classList.toggle('hidden', isGuest);
             if (isGuest) {
@@ -2606,6 +2811,50 @@
         function filterUsersList() {
             renderUsersList();
         }
+
+        /* ---------- Loading screen and the "lights on" reveal of the home modes ---------- */
+        let siteReady = false;
+
+        function playModeReveal() {
+            if (!siteReady || startScreen.classList.contains('hidden')) return;
+            modeStage.classList.remove('lit');
+            void modeStage.offsetWidth;
+            setTimeout(() => modeStage.classList.add('lit'), 250);
+        }
+
+        new MutationObserver(() => {
+            refreshResumeNote();
+            playModeReveal();
+        }).observe(startScreen, { attributes: true, attributeFilter: ['class'] });
+
+        (function initLoader() {
+            const loader = document.getElementById('site-loader');
+            const fill = document.getElementById('loader-bar-fill');
+            const images = [...document.querySelectorAll('.mode-card img, .maten-watermark img')];
+            const total = images.length;
+            let done = 0;
+            const step = () => { done++; fill.style.width = Math.round(done / total * 100) + '%'; };
+            const imageReady = img => new Promise(resolve => {
+                const finish = () => resolve();
+                if (img.complete && img.naturalWidth) return finish();
+                img.addEventListener('load', finish, { once: true });
+                img.addEventListener('error', finish, { once: true });
+            }).then(() => (img.decode ? img.decode().catch(() => {}) : null));
+            /* Only the pictures are awaited: the 9 MB music file must not hold the site back */
+            const assets = Promise.all(images.map(img => imageReady(img).then(step)));
+            const minimum = new Promise(resolve => setTimeout(resolve, 1300));
+            const giveUp = new Promise(resolve => setTimeout(resolve, 10000));
+            Promise.race([Promise.all([assets, minimum]), giveUp]).then(() => {
+                fill.style.width = '100%';
+                setTimeout(() => {
+                    loader.classList.add('done');
+                    siteReady = true;
+                    refreshResumeNote();
+                    playModeReveal();
+                    setTimeout(() => loader.remove(), 700);
+                }, 250);
+            });
+        })();
     </script>
 </body>
 </html>
