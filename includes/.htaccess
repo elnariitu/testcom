@@ -1,0 +1,3 @@
+<FilesMatch "\.local\.php$">
+    Require all denied
+</FilesMatch>
