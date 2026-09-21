@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no, email=no, address=no">
     <title>Kazakhstan History Quiz & Essay</title>
-    <link rel="stylesheet" href="style.css?v=45">
+    <link rel="stylesheet" href="style.css?v=47">
 </head>
 <body>
 
@@ -268,6 +268,31 @@
         </div>
     </div>
 
+    <!-- Result window opened from a Test History block -->
+    <div class="history-result-overlay hidden" id="history-result-overlay" onclick="if(event.target===this) closeHistoryResult()">
+        <div class="history-result-card">
+            <button class="modal-close" onclick="closeHistoryResult()" aria-label="Close"><span id="history-result-close-icon" class="icon-svg"></span></button>
+            <div class="history-result-mode" id="hr-mode"></div>
+            <div class="history-result-date" id="hr-date"></div>
+            <div class="result-user">
+                <strong id="hr-user-name"></strong>
+                <small id="hr-user-email"></small>
+            </div>
+            <div class="correct-count-wrap" id="hr-count-wrap">
+                <div class="correct-count-number" id="hr-count">0</div>
+                <div class="correct-count-label">correct answers</div>
+            </div>
+            <p id="hr-score"></p>
+            <p id="hr-essay-status"></p>
+            <div class="history-result-actions">
+                <button class="btn" onclick="openHistoryDetails()">Test Details</button>
+                <button class="btn-glass hidden" id="hr-download-btn" onclick="downloadHistoryEssay()">
+                    <span class="btn-glass-icon icon-svg" id="hr-download-icon"></span> <span>Download Essay</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="history-context-menu hidden" id="history-context-menu">
         <button onclick="deleteSelectedHistory()" data-i18n="delete">Delete</button>
     </div>
@@ -296,6 +321,7 @@
                 </div>
                 <button class="mode-arrow mode-arrow-right" onclick="rotateMode(1)" aria-label="Next mode"><span class="icon-svg" id="mode-next-icon"></span></button>
             </div>
+            <div class="mode-name" id="mode-name" aria-live="polite">QUIZ</div>
             <button class="btn mode-start-btn" id="mode-start-btn" onclick="startSelectedMode()" data-i18n="mode_start">START</button>
             <div class="resume-note hidden" id="resume-note">
                 <p>Your test was not finished. Continue?</p>
@@ -323,6 +349,10 @@
 
         <!-- Result -->
         <div id="result-screen" class="hidden">
+            <div class="result-user" id="result-user">
+                <strong id="result-user-name"></strong>
+                <small id="result-user-email"></small>
+            </div>
             <div class="correct-count-wrap">
                 <div class="correct-count-number" id="correct-count-number">0</div>
                 <div class="correct-count-label">correct answers</div>
@@ -752,6 +782,8 @@
         document.getElementById('mode-prev-icon').innerHTML = ICON_CHEVRON_LEFT;
         document.getElementById('mode-next-icon').innerHTML = ICON_CHEVRON_RIGHT;
         document.getElementById('week-picker-close-icon').innerHTML = ICON_X;
+        document.getElementById('history-result-close-icon').innerHTML = ICON_X;
+        document.getElementById('hr-download-icon').innerHTML = ICON_DOWNLOAD;
         document.getElementById('games-back-icon').innerHTML = ICON_CHEVRON_LEFT;
         document.getElementById('history-back-icon').innerHTML = ICON_CHEVRON_LEFT;
         guardWarningIcon.innerHTML = ICON_WARNING;
@@ -825,6 +857,7 @@
         function renameFromMenu() {
             if (menuOpen) toggleMenu();
             closeWeekPicker();
+            closeHistoryResult();
             clearInterval(timer);
             clearInterval(essayTimer);
             quizScreen.classList.add('hidden');
@@ -890,6 +923,7 @@
         function goHome() {
             if (menuOpen) toggleMenu();
             closeWeekPicker();
+            closeHistoryResult();
             clearInterval(timer);
             clearInterval(essayTimer);
             clearInterval(gameTimer);
@@ -911,6 +945,7 @@
         function restartFromMenu() {
             if (menuOpen) toggleMenu();
             closeWeekPicker();
+            closeHistoryResult();
             clearInterval(timer);
             clearInterval(essayTimer);
             quizScreen.classList.add('hidden');
@@ -1086,16 +1121,40 @@
             });
         }
 
+        const MODE_NAMES = ['QUIZ', 'ESSAY', 'WEEKLY TEST', 'GAME'];
+        const modeName = document.getElementById('mode-name');
+
+        /* Name under the picture: slides in from the side the new mode comes from */
+        function setModeName(step) {
+            modeName.textContent = MODE_NAMES[modeIndex];
+            if (!step) return;
+            modeName.style.setProperty('--dir', step > 0 ? 1 : -1);
+            modeName.classList.remove('swap');
+            void modeName.offsetWidth;
+            modeName.classList.add('swap');
+        }
+
+        /* Side pictures rest at the page edges, so a new mode slides in from the edge to the centre */
+        function updateModeMetrics() {
+            const stageWidth = modeStage.clientWidth;
+            const card = modeStage.querySelector('.mode-card.is-center');
+            if (!stageWidth || !card) return;
+            const previewWidth = card.offsetWidth * 0.58;
+            modeStage.style.setProperty('--preview-shift', Math.round(stageWidth / 2 - previewWidth * 0.25) + 'px');
+        }
+        window.addEventListener('resize', updateModeMetrics);
+
         function rotateMode(step) {
             if (modeRotateLocked) return;
             modeRotateLocked = true;
             modeIndex = (modeIndex + step + MODES.length) % MODES.length;
             modeStage.classList.add('rotating');
             layoutModeCards();
+            setModeName(step);
             setTimeout(() => {
                 modeRotateLocked = false;
                 modeStage.classList.remove('rotating');
-            }, 450);
+            }, 380);
         }
 
         function startSelectedMode() {
@@ -1134,6 +1193,8 @@
                 else if (e.key === 'ArrowLeft') rotateMode(-1);
             });
             layoutModeCards();
+            setModeName(0);
+            updateModeMetrics();
         })();
 
         /* ---------- Week picker: vertical drum for Weekly Test / Essay ---------- */
@@ -1267,6 +1328,7 @@
         function openGamesPage() {
             if (menuOpen) toggleMenu();
             closeWeekPicker();
+            closeHistoryResult();
             clearInterval(timer);
             clearInterval(essayTimer);
             stopTestGuardSession();
@@ -1941,8 +2003,12 @@
         }
 
         function downloadEssay() {
-            if (userEssayText.length === 0) return;
-            const blob = new Blob([userEssayText], { type: 'text/plain;charset=utf-8' });
+            downloadEssayText(userEssayText);
+        }
+
+        function downloadEssayText(text) {
+            if (!text || text.length === 0) return;
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -1957,7 +2023,8 @@
             return questionRenderState.filter(state => state && state.answered && state.isCorrect).length;
         }
 
-        function animateCorrectCount(target) {
+        function animateCorrectCount(target, el) {
+            const correctCountNumber = el || document.getElementById('correct-count-number');
             if (!correctCountNumber) return;
             const duration = 1100;
             const startTime = performance.now();
@@ -1979,8 +2046,16 @@
             requestAnimationFrame(tick);
         }
 
+        function fillUserInfo(nameEl, emailEl) {
+            nameEl.textContent = getSavedNickname() || 'Guest';
+            const email = (currentUserEmail && currentUserRole !== 'guest') ? currentUserEmail : '';
+            emailEl.textContent = email;
+            emailEl.classList.toggle('hidden', !email);
+        }
+
         function endQuiz() {
             clearRun();
+            fillUserInfo(document.getElementById('result-user-name'), document.getElementById('result-user-email'));
             stopTestGuardSession();
             essayScreen.classList.add('hidden');
             resultScreen.classList.remove('hidden');
@@ -2427,6 +2502,7 @@
                                 <strong>${escapeHtml(historyModeLabel(item) || 'Quiz')}</strong>
                                 <span class="history-badge">${escapeHtml(formatHistoryStatus(item.status))}</span>
                             </div>
+                            <div class="history-card-user">${escapeHtml(getSavedNickname() || 'Guest')}${currentUserEmail ? ` <small>${escapeHtml(currentUserEmail)}</small>` : ''}</div>
                             <div class="history-card-score">${scoreHtml}</div>
                             <div class="history-card-meta">${escapeHtml(dateLabel)}${isEssayOnly ? '' : ` &middot; ${Number(item.answered_count)} / ${totalQuestions} answered &middot; ${Number(item.essay_words)} words`}</div>
                         </div>
@@ -2474,6 +2550,9 @@
             syncAccountBarVisibility();
         }
 
+        let historyResultItem = null;
+        let historyResultSnapshot = null;
+
         function openHistoryResult(item) {
             let snapshot = null;
             try {
@@ -2481,12 +2560,56 @@
             } catch (e) {
                 snapshot = null;
             }
+            historyResultItem = item;
+            historyResultSnapshot = snapshot;
+
+            const mode = snapshot && snapshot.mode ? snapshot.mode : 'quiz';
+            const week = String((snapshot && snapshot.week) || '').padStart(2, '0');
+            const total = Number(item.total_questions);
+            const correct = Math.round(Number(item.score) / 100);
+            const hasQuiz = total > 0;
+            const hasEssay = mode !== 'quiz' || Number(item.essay_words) > 0;
+            const date = new Date(String(item.created_at).replace(' ', 'T'));
+
+            document.getElementById('hr-mode').textContent =
+                mode === 'week' ? 'Weekly Test - Week ' + week : mode === 'essay' ? 'Essay - Week ' + week : 'Quiz';
+            document.getElementById('hr-date').textContent = Number.isNaN(date.getTime()) ? item.created_at : date.toLocaleString();
+            fillUserInfo(document.getElementById('hr-user-name'), document.getElementById('hr-user-email'));
+
+            document.getElementById('hr-count-wrap').classList.toggle('hidden', !hasQuiz);
+            const scoreEl = document.getElementById('hr-score');
+            scoreEl.classList.toggle('hidden', !hasQuiz);
+            scoreEl.textContent = `Quiz Score: ${Number(item.score)} / ${Number(item.max_score)}`;
+
+            const statusEl = document.getElementById('hr-essay-status');
+            const essayText = snapshot && snapshot.essayText ? snapshot.essayText : '';
+            statusEl.classList.toggle('hidden', !(hasEssay || item.status === 'disqualified'));
+            statusEl.textContent = item.status === 'disqualified'
+                ? 'Test stopped: 3 warnings were reached.'
+                : (Number(item.essay_words) > 0 ? `Essay Status: Submitted (${Number(item.essay_words)} words).` : 'Essay Status: Not submitted / Empty.');
+            document.getElementById('hr-download-btn').classList.toggle('hidden', !essayText || item.status === 'disqualified');
+
+            document.getElementById('history-result-overlay').classList.remove('hidden');
+            if (hasQuiz) animateCorrectCount(correct, document.getElementById('hr-count'));
+        }
+
+        function closeHistoryResult() {
+            document.getElementById('history-result-overlay').classList.add('hidden');
+        }
+
+        function openHistoryDetails() {
+            const snapshot = historyResultSnapshot;
             if (!snapshot || !Array.isArray(snapshot.questions)) {
                 resultsReviewList.innerHTML = '<p class="history-empty">Full answers were not saved for this older test.</p>';
             } else {
                 renderReviewSnapshot(snapshot);
             }
             resultsReviewOverlay.classList.remove('hidden');
+        }
+
+        function downloadHistoryEssay() {
+            const text = historyResultSnapshot && historyResultSnapshot.essayText;
+            downloadEssayText(text);
         }
 
         const ADMIN_COPY_KEY = 'adminCopyEnabled';
@@ -2823,6 +2946,7 @@
         }
 
         new MutationObserver(() => {
+            updateModeMetrics();
             refreshResumeNote();
             playModeReveal();
         }).observe(startScreen, { attributes: true, attributeFilter: ['class'] });
@@ -2849,6 +2973,7 @@
                 setTimeout(() => {
                     loader.classList.add('done');
                     siteReady = true;
+                    updateModeMetrics();
                     refreshResumeNote();
                     playModeReveal();
                     setTimeout(() => loader.remove(), 700);
