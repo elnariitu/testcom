@@ -8,6 +8,7 @@ Usage:
     python3 deploy.py "msg" --no-git              # FTP only
     python3 deploy.py --no-ftp "msg"              # commit + push only
     python3 deploy.py --force "msg"               # re-upload every file
+    python3 deploy.py "msg" --skip=auth.php       # leave a file out of both the commit and the upload
 
 Rules:
   * Never deletes anything on the server.
@@ -34,9 +35,12 @@ BACKUP_ROOT = os.path.join(LOCAL_DIR, ".deploy-backups")
 EXCLUDE_DIRS = {".git", ".claude", "content", "__MACOSX", ".deploy-backups", "node_modules", ".idea", ".vscode"}
 EXCLUDE_FILES = [
     ".DS_Store", ".gitignore", ".deploy.env", ".deploystate",
-    "deploy.py", "build_weekly.py", "README.md", "index.html", "*.previous", "*.backup", "*.liquid", "*.zip", "*.log",
+    "deploy.py", "build_weekly.py", "README.md", "index.html", "gamesblock.png", "*.previous", "*.backup", "*.liquid", "*.zip", "*.log",
     "*.v[0-9]*",
 ]
+
+
+SKIP = set()   # relative paths given with --skip=...; left out of the commit and the upload
 
 
 def log(msg=""):
@@ -69,7 +73,7 @@ def collect_files():
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
         for fn in files:
             rel = os.path.relpath(os.path.join(root, fn), LOCAL_DIR).replace(os.sep, "/")
-            if not should_skip(rel):
+            if not should_skip(rel) and rel not in SKIP:
                 out.append(rel)
     # *.local.php first, so auth.php never goes live before the file it reads.
     return sorted(out, key=lambda r: (not r.endswith('.local.php'), r))
@@ -102,7 +106,7 @@ def publish_git(message, dry_run):
             if not message:
                 log("git: there are changes but no commit message was given.")
                 return False
-            git("add", "-A")
+            git("add", "-A", "--", ".", *[":(exclude)" + name for name in sorted(SKIP)])
             git("commit", "-m", message)
             log("git: committed.")
     else:
@@ -220,6 +224,7 @@ def publish_ftp(env, dry_run, force):
 def main():
     args = sys.argv[1:]
     flags = {a for a in args if a.startswith("--")}
+    SKIP.update(a.split("=", 1)[1] for a in args if a.startswith("--skip=") and "=" in a)
     message = " ".join(a for a in args if not a.startswith("--")).strip()
     dry_run = "--dry-run" in flags
 

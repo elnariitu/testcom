@@ -3346,6 +3346,90 @@ html, body {
     background: linear-gradient(118deg, transparent 0 62%, var(--lobby-line-soft) 62% 71%, transparent 71% 73%, var(--lobby-line) 73% 73.3%, transparent 73.5% 100%);
 }
 
+.lobby-online {
+    position: absolute;
+    top: 104px;
+    left: 22px;
+    z-index: 4;
+    width: min(250px, calc(100vw - 44px));
+    max-height: min(310px, 42vh);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: var(--text);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid var(--accent-orange);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px var(--shadow-color);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.lobby-online-head {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--glass-border);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+}
+
+.lobby-online-head > span:last-child {
+    margin-left: auto;
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.lobby-online-dot,
+.lobby-online-user > span {
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 9px rgba(34, 197, 94, 0.75);
+}
+
+.lobby-online-list {
+    min-height: 46px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-orange) transparent;
+}
+
+.lobby-online-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 38px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--lobby-line-soft);
+}
+
+.lobby-online-user:last-child {
+    border-bottom: 0;
+}
+
+.lobby-online-user b {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+}
+
+.lobby-online-empty {
+    padding: 15px 12px;
+    color: var(--muted);
+    font-size: 0.76rem;
+}
+
 /* Players stand in the middle of the page, without any box */
 .lobby-players {
     position: absolute;
@@ -3677,6 +3761,13 @@ html, body {
 }
 
 @media (max-width: 560px) {
+    .lobby-online {
+        top: 78px;
+        left: 12px;
+        width: min(210px, calc(100vw - 24px));
+        max-height: 28vh;
+    }
+
     .lobby-players {
         top: 40%;
         gap: 8px;
@@ -3695,4 +3786,3 @@ html, body {
         height: 62px;
     }
 }
-
