@@ -15,8 +15,5 @@ __MACOSX/
 *.v[0-9]*
 *.zip
 
-# Audio is deployed by FTP only (not stored in the public repo)
-Music/
-
 # Older static variant; the site is served from index.php
 index.html
