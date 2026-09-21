@@ -3,7 +3,7 @@
 Builds weekly-tests.js from the readable sources in content/weeks_*.py.
 
 Each source file adds to a dict W:
-    W[n] = dict(title="...", essays=["...", "...", "..."],
+    W[n] = dict(title="...", essay="one specific essay topic",
                 q=[("question", "correct", "wrong1", "wrong2", "wrong3"), ...])
 
 The script refuses to build if a question is malformed or repeated (within the weekly
@@ -20,8 +20,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-MIN_QUESTIONS = 20
-ESSAYS_PER_WEEK = 3
+QUESTIONS_PER_WEEK = 30
 
 
 def norm(text):
@@ -56,10 +55,10 @@ def main():
             problems.append("week %d is missing" % n)
             continue
         week = W[n]
-        if len(week["essays"]) < ESSAYS_PER_WEEK:
-            problems.append("week %d has fewer than %d essay topics" % (n, ESSAYS_PER_WEEK))
-        if len(week["q"]) < MIN_QUESTIONS:
-            problems.append("week %d has %d questions (need %d)" % (n, len(week["q"]), MIN_QUESTIONS))
+        if not week.get("essay", "").strip():
+            problems.append("week %d has no essay topic" % n)
+        if len(week["q"]) != QUESTIONS_PER_WEEK:
+            problems.append("week %d has %d questions (need exactly %d)" % (n, len(week["q"]), QUESTIONS_PER_WEEK))
         questions = []
         for i, row in enumerate(week["q"], 1):
             where = "week %d q%d" % (n, i)
@@ -75,7 +74,7 @@ def main():
                 problems.append("%s repeats a question from %s: %s" % (where, seen[key], text[:60]))
             seen[key] = where
             questions.append({"question": text, "correctAnswer": correct, "wrongAnswers": wrong})
-        out[str(n)] = {"title": week["title"], "essays": week["essays"], "questions": questions}
+        out[str(n)] = {"title": week["title"], "essay": week["essay"], "questions": questions}
 
     if problems:
         print("BUILD FAILED:")
@@ -89,7 +88,7 @@ def main():
         fh.write('const WEEKLY_TESTS = JSON.parse(atob("%s"));\n' % blob)
     total = sum(len(w["questions"]) for w in out.values())
     print("OK: %d weeks, %d questions, %d essay topics -> weekly-tests.js (%d KB)" % (
-        len(out), total, sum(len(w["essays"]) for w in out.values()), len(blob) // 1024))
+        len(out), total, len(out), len(blob) // 1024))
     return 0
 
 

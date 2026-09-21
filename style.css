@@ -3162,3 +3162,169 @@ body.admin-copy-enabled .maten-watermark * {
         min-width: 200px;
     }
 }
+
+/* ---------- Test history: one block per result ---------- */
+.history-list .history-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.history-list .history-card > .history-card-body {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.history-card-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.history-list .history-card .history-card-head strong {
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.history-list .history-card .history-badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.history-list .history-card .history-card-score {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 6px 0 2px;
+}
+
+.history-list .history-card .history-card-score b {
+    font-size: 1.7rem;
+    line-height: 1;
+    color: #22c55e;
+}
+
+.history-list .history-card .history-card-score span {
+    display: inline;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.history-list .history-card .history-card-meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.history-trash-btn {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-red);
+    background: rgba(193, 18, 31, 0.1);
+    border: 1px solid rgba(193, 18, 31, 0.35);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.history-trash-btn:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+.history-trash-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-history-delete:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.history-guest {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 34px 12px;
+    text-align: center;
+}
+
+.history-guest p {
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+@media (max-width: 560px) {
+    .history-list .history-card {
+        flex-direction: row;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .history-actions {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/* ---------- Phone: menu button and JOIN button as blocks, like the sound button ---------- */
+@media (max-width: 899px) {
+    #menu-btn {
+        width: 46px !important;
+        height: 46px !important;
+        background: var(--menu-item-bg) !important;
+        border: 1px solid var(--menu-item-border) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 12px var(--shadow-color) !important;
+    }
+
+    #menu-btn:hover {
+        background: var(--menu-item-bg) !important;
+        border: 1px solid var(--menu-item-border) !important;
+        box-shadow: 0 4px 12px var(--shadow-color) !important;
+    }
+
+    #menu-btn .hamburger-icon {
+        width: 20px !important;
+        height: 14px !important;
+    }
+
+    .account-bar .btn-join {
+        min-height: 46px;
+        padding: 0 20px;
+        color: var(--text);
+        background: var(--menu-item-bg);
+        border: 1px solid var(--menu-item-border);
+        border-radius: 10px;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        font-size: 0.95rem;
+    }
+
+    .account-bar .btn-join:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+    }
+
+    .account-info {
+        min-height: 46px;
+        padding: 0 14px;
+        border-radius: 10px;
+    }
+}
+

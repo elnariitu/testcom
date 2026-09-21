@@ -2,11 +2,7 @@
 
 W[10] = dict(
     title="Industrialization and Collectivization",
-    essays=[
-        "What were the main features of collectivization in Kazakhstan and what were its consequences?",
-        "Analyze Soviet industrialization in Kazakhstan: the five-year plans, sectoral priorities, infrastructure, new industrial centers and urbanization.",
-        "Explain the political persecutions of the 1930s, the Great Terror and the prison-camp system, and their social and cultural impact on Kazakhstan.",
-    ],
+    essay="Explain the main features of collectivization in Kazakhstan and its consequences for the Kazakh people.",
     q=[
         ("Which years did the First Five-Year Plan of the USSR cover?", "1928-1932", "1921-1925", "1941-1945", "1953-1958"),
         ("The Turksib railway connected Turkestan with which region?", "Siberia", "The Caucasus", "The Volga region", "Manchuria"),
@@ -33,11 +29,7 @@ W[10] = dict(
 
 W[11] = dict(
     title="Kazakhstan in the Great Patriotic War and Postwar Years",
-    essays=[
-        "Analyze Kazakhstan's contribution to victory in the Great Patriotic War (1941-1945): human resources, industry, agriculture and the home front.",
-        "Describe Kazakhstan's postwar development (1946-1953), including reconstruction, the famine of 1946-1947, repression and the Bekmakhanov case.",
-        "Assess the Virgin Lands campaign and the impact of nuclear testing and environmental damage on Kazakhstan during Khrushchev's decade.",
-    ],
+    essay="Explain Kazakhstan's contribution to victory in the Great Patriotic War (1941-1945).",
     q=[
         ("About how many people from Kazakhstan fought at the front in the Great Patriotic War?", "About 1.2 million", "About 120,000", "About 12 million", "About 12,000"),
         ("Which division, formed in Alma-Ata, fought in the defence of Moscow in 1941?", "The 316th Rifle Division (Panfilov's)", "The Alash Division", "The Turgai Corps", "The Golden Horde Regiment"),
@@ -64,11 +56,7 @@ W[11] = dict(
 
 W[12] = dict(
     title="Kazakhstan from 1965 to 1991",
-    essays=[
-        "What were the causes and historical significance of the December 1986 events in Almaty?",
-        "Describe the Brezhnev era of 'stagnation' in Kazakhstan: industrial growth, agricultural challenges, urbanization and Russification.",
-        "Explain the path from perestroika and glasnost to the Declaration of Sovereignty (October 25, 1990) and the Independence Law (December 16, 1991).",
-    ],
+    essay="Explain the causes and historical significance of the December 1986 events in Almaty.",
     q=[
         ("Who led the Communist Party of Kazakhstan from 1964 to 1986?", "Dinmukhamed Kunayev", "Gennady Kolbin", "Nursultan Nazarbayev", "Leonid Brezhnev"),
         ("Who replaced Dinmukhamed Kunayev as Kazakh party leader in December 1986?", "Gennady Kolbin", "Nursultan Nazarbayev", "Mikhail Gorbachev", "Olzhas Suleimenov"),

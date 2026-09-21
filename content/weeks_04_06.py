@@ -2,11 +2,7 @@
 
 W[4] = dict(
     title="The Great Steppe in the Golden Horde Period",
-    essays=[
-        "Describe the political structure of the Golden Horde (Juchi Ulus) and its impact on Kazakhstan.",
-        "Explain the role of Ak Orda (the White Horde) in the formation of Kazakh statehood.",
-        "Analyze the Mongol invasion of Central Asia and Kazakhstan and its political, economic and cultural consequences.",
-    ],
+    essay="Explain the role of Ak Orda (the White Horde) in the formation of Kazakh statehood.",
     q=[
         ("In which year was Temujin proclaimed Genghis Khan at a great kurultai?", "1206", "1219", "1240", "1256"),
         ("Which event triggered Genghis Khan's campaign against Khorezm in 1219?", "The execution of Mongol merchants and envoys at Otrar", "A Kipchak raid on the Mongol capital", "A dispute over Silk Road taxes with China", "The death of his son Juchi"),
@@ -33,11 +29,7 @@ W[4] = dict(
 
 W[5] = dict(
     title="The Kazakh Khanate from the 15th to the 18th Century",
-    essays=[
-        "What was the importance of Kasym Khan's law code, the Qasqa Zholy, for the Kazakh Khanate?",
-        "What were the causes and consequences of the Kazakh-Dzungar wars?",
-        "Analyze the preconditions and formation of the Kazakh Khanate and the roles of Kerey and Janibek.",
-    ],
+    essay="Explain the importance of Kasym Khan's law code, the Qasqa Zholy, for the Kazakh Khanate.",
     q=[
         ("In which year is the Kazakh Khanate traditionally said to have been founded?", "1465", "1428", "1723", "1822"),
         ("Where did Kerey and Janibek settle after leaving the state of Abulkhair?", "The Chu valley in Zhetysu (Moghulistan)", "The Ural steppe", "The Siberian forest zone", "The Caspian shore"),
@@ -64,11 +56,7 @@ W[5] = dict(
 
 W[6] = dict(
     title="Kazakhstan in the 18th to Early 20th Centuries",
-    essays=[
-        "Describe the stages of Russian colonial policy in Kazakhstan, from protectorate to annexation, administrative integration and settlement colonization.",
-        "Why was the khan's power abolished in the 1820s, and what were the consequences of the 1822 and 1824 charters?",
-        "What were the main goals of Kenesary Kasymuly's uprising (1837-1847), and why did it fail?",
-    ],
+    essay="Explain why the power of the khans was abolished in the 1820s and what changed after the 1822 and 1824 charters.",
     q=[
         ("In which year did Khan Abulkhair of the Junior Zhuz accept Russian protection?", "1731", "1723", "1822", "1868"),
         ("Which Russian empress accepted the Junior Zhuz's request for protection in 1731?", "Anna Ioannovna", "Catherine II", "Elizabeth", "Peter I"),

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no, email=no, address=no">
     <title>Kazakhstan History Quiz & Essay</title>
-    <link rel="stylesheet" href="style.css?v=39">
+    <link rel="stylesheet" href="style.css?v=41">
 </head>
 <body>
 
@@ -155,7 +155,7 @@
             <li><button class="menu-item" onclick="openMusicModal()"><span class="icon-svg" id="music-icon"></span> <span data-i18n="menu_music_label">Music</span></button></li>
             <li><button class="menu-item" onclick="openDesignModal()"><span class="icon-svg" id="design-icon"></span> <span data-i18n="menu_theme_label">Design</span></button></li>
             <li><button class="menu-item" onclick="openPromoModal()"><span class="icon-svg" id="promo-icon"></span> <span data-i18n="menu_promo">Promo Code</span></button></li>
-            <li><button class="menu-item hidden" id="history-menu-btn" onclick="openHistoryModal()"><span class="icon-svg" id="history-icon"></span> <span data-i18n="history_title">Test History</span></button></li>
+            <li><button class="menu-item" id="history-menu-btn" onclick="openHistoryModal()"><span class="icon-svg" id="history-icon"></span> <span data-i18n="history_title">Test History</span></button></li>
             <li><button class="menu-item hidden" id="admin-panel-menu-btn" onclick="openAdminPanel()"><span class="icon-svg" id="admin-panel-icon"></span> <span data-i18n="menu_admin_panel">Admin Panel</span></button></li>
         </ul>
     </div>
@@ -240,9 +240,21 @@
                     <input type="checkbox" id="history-select-all" onchange="toggleSelectAllHistory(this.checked)">
                     <span>Select all</span>
                 </label>
-                <button class="btn-history-delete" onclick="deleteCheckedHistory()" data-i18n="delete">Delete</button>
+                <button class="btn-history-delete" id="history-delete-selected" onclick="deleteCheckedHistory()" disabled><span data-i18n="delete">Delete</span> <span id="history-delete-count"></span></button>
             </div>
             <div class="history-list" id="history-list"></div>
+        </div>
+    </div>
+
+    <!-- Confirm deleting history entries -->
+    <div class="confirm-overlay hidden" id="history-delete-overlay" onclick="if(event.target===this) closeHistoryDeleteConfirm()">
+        <div class="confirm-card">
+            <h3 id="history-delete-title">Delete test result?</h3>
+            <p class="confirm-subtext" id="history-delete-subtext">This cannot be undone.</p>
+            <div class="confirm-actions">
+                <button class="btn-confirm-cancel" onclick="closeHistoryDeleteConfirm()">Cancel</button>
+                <button class="btn-confirm-yes" onclick="confirmHistoryDelete()">Delete</button>
+            </div>
         </div>
     </div>
 
@@ -280,10 +292,10 @@
         <div id="essay-screen" class="hidden">
             <h2 id="essay-title-text">Final Task: Historical Essay</h2>
             <div class="essay-prompt" id="essay-prompt-text">
-                <strong>Topic:</strong> Analyze the role of the Saka tribes in shaping the political and cultural landscape of the Eurasian steppe. Write your arguments in English (around 200 words).
+                <strong>Topic:</strong> Analyze the role of the Saka tribes in shaping the political and cultural landscape of the Eurasian steppe. Write your arguments in English (around 120 words).
             </div>
-            <textarea id="essay-input" class="essay-textarea" placeholder="Type your essay here (200 words)..."></textarea>
-            <div class="essay-word-counter" id="essay-word-counter">0 / 200 words</div>
+            <textarea id="essay-input" class="essay-textarea" placeholder="Type your essay here (120 words)..."></textarea>
+            <div class="essay-word-counter" id="essay-word-counter">0 / 120 words</div>
             <div class="essay-footer">
                 <div class="essay-timer" id="essay-timer-display">Time left: 20:00</div>
                 <button class="btn" onclick="submitEssay()" data-i18n="essay_submit">SUBMIT & SAVE ESSAY</button>
@@ -648,10 +660,10 @@
         let currentEssayTopic = '';
         function showEssayTopic(topic) {
             currentEssayTopic = topic;
-            essayPromptText.innerHTML = `<strong>Topic:</strong> ${escapeHtml(topic)} Write your arguments in English (around 200 words).`;
+            essayPromptText.innerHTML = `<strong>Topic:</strong> ${escapeHtml(topic)} Write your arguments in English (around 120 words).`;
         }
 
-        const ESSAY_WORD_TARGET = 200;
+        const ESSAY_WORD_TARGET = 120;
 
         function countWords(text) {
             const trimmed = text.trim();
@@ -683,6 +695,7 @@
         const ICON_MUSIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle></svg>';
         const ICON_HISTORY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 3 3 9 9 9"></polyline><path d="M12 7v5l3 2"></path></svg>';
         const ICON_GAMEPAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1"></circle><circle cx="18" cy="11" r="1"></circle><path d="M5.2 18.4 8 15h8l2.8 3.4A2.2 2.2 0 0 0 22.7 17l-1.4-7.3A4.5 4.5 0 0 0 16.9 6H7.1a4.5 4.5 0 0 0-4.4 3.7L1.3 17a2.2 2.2 0 0 0 3.9 1.4Z"></path></svg>';
+        const ICON_TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>';
         const ICON_WARNING = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
 
         document.getElementById('home-icon').innerHTML = ICON_HOME;
@@ -981,6 +994,7 @@
 
         function scrollWheelTo(index, smooth) {
             weekWheelScroll.scrollTo({ top: index * WHEEL_ITEM_H, behavior: smooth ? 'smooth' : 'auto' });
+            if (!smooth) updateWheel();
         }
 
         function updateWheel() {
@@ -997,7 +1011,7 @@
                 item.setAttribute('aria-selected', i === active ? 'true' : 'false');
             });
             const data = (typeof WEEKLY_TESTS !== 'undefined') ? WEEKLY_TESTS[active + 1] : null;
-            weekWheelCaption.textContent = data ? data.title : 'Weekly tests are not available right now.';
+            weekWheelCaption.textContent = data ? (weekPickerMode === 'essay' ? data.essay : data.title) : 'Weekly tests are not available right now.';
         }
 
         function confirmWeekPicker() {
@@ -1411,8 +1425,7 @@
         let runEssayTopic = '';
 
         function pickWeekEssay(week) {
-            const list = WEEKLY_TESTS[week].essays;
-            return list[Math.floor(Math.random() * list.length)];
+            return WEEKLY_TESTS[week].essay;
         }
 
         function startQuiz() {
@@ -1938,7 +1951,7 @@
             currentUserEmail = email;
             currentUserRole = role || 'user';
             adminPanelMenuBtn.classList.toggle('hidden', currentUserRole !== 'admin');
-            historyMenuBtn.classList.toggle('hidden', currentUserRole === 'guest');
+            if (!historyPage.classList.contains('hidden')) loadTestHistory();
             syncAdminCopyButton();
             if (name) {
                 syncNicknameForAccount(name);
@@ -1951,9 +1964,7 @@
             currentUserEmail = '';
             currentUserRole = 'guest';
             adminPanelMenuBtn.classList.add('hidden');
-            historyMenuBtn.classList.add('hidden');
-            historyPage.classList.add('hidden');
-            historyList.innerHTML = '';
+            if (!historyPage.classList.contains('hidden')) loadTestHistory();
             syncAdminCopyButton();
         }
 
@@ -2088,8 +2099,7 @@
             if (!selectedHistoryId) return;
             const id = selectedHistoryId;
             hideHistoryContextMenu();
-            await deleteHistoryIds([id]);
-            loadTestHistory();
+            askDeleteHistory([id]);
         }
 
         function getCheckedHistoryIds() {
@@ -2104,6 +2114,9 @@
             const checked = checks.filter(input => input.checked);
             historySelectAll.checked = checks.length > 0 && checked.length === checks.length;
             historySelectAll.indeterminate = checked.length > 0 && checked.length < checks.length;
+            const deleteBtn = document.getElementById('history-delete-selected');
+            deleteBtn.disabled = checked.length === 0;
+            document.getElementById('history-delete-count').innerText = checked.length ? `(${checked.length})` : '';
         }
 
         function toggleSelectAllHistory(checked) {
@@ -2128,8 +2141,28 @@
         }
 
         async function deleteCheckedHistory() {
-            const ids = getCheckedHistoryIds();
-            if (ids.length === 0) return;
+            askDeleteHistory(getCheckedHistoryIds());
+        }
+
+        let pendingHistoryDeleteIds = [];
+
+        function askDeleteHistory(ids) {
+            const unique = [...new Set(ids)].filter(Boolean);
+            if (unique.length === 0) return;
+            pendingHistoryDeleteIds = unique;
+            document.getElementById('history-delete-title').innerText =
+                unique.length === 1 ? 'Delete this test result?' : `Delete ${unique.length} test results?`;
+            document.getElementById('history-delete-overlay').classList.remove('hidden');
+        }
+
+        function closeHistoryDeleteConfirm() {
+            pendingHistoryDeleteIds = [];
+            document.getElementById('history-delete-overlay').classList.add('hidden');
+        }
+
+        async function confirmHistoryDelete() {
+            const ids = pendingHistoryDeleteIds;
+            closeHistoryDeleteConfirm();
             await deleteHistoryIds(ids);
             loadTestHistory();
         }
@@ -2146,7 +2179,12 @@
         }
 
         async function loadTestHistory() {
-            if (!currentUserEmail || currentUserRole === 'guest') return;
+            const isGuest = !currentUserEmail || currentUserRole === 'guest';
+            document.querySelector('.history-actions').classList.toggle('hidden', isGuest);
+            if (isGuest) {
+                historyList.innerHTML = '<div class="history-guest"><p>Sign in to save your test results and see them here.</p><button class="btn" onclick="openAuthScreen()">Sign In</button></div>';
+                return;
+            }
             if (historySelectAll) {
                 historySelectAll.checked = false;
                 historySelectAll.indeterminate = false;
@@ -2158,34 +2196,41 @@
                 const history = res.ok ? (data.history || []) : [];
                 if (history.length === 0) {
                     historyList.innerHTML = '<p class="history-empty">No test history yet.</p>';
+                    syncHistorySelectAllState();
                     return;
                 }
                 historyList.innerHTML = '';
                 history.forEach(item => {
                     const row = document.createElement('div');
-                    row.className = 'history-row';
+                    row.className = 'history-row history-card';
                     row.tabIndex = 0;
                     row.setAttribute('role', 'button');
                     const date = new Date(String(item.created_at).replace(' ', 'T'));
                     const dateLabel = Number.isNaN(date.getTime()) ? item.created_at : date.toLocaleString();
                     const correctAnswers = Math.round(Number(item.score) / 100);
+                    const totalQuestions = Number(item.total_questions);
+                    const isEssayOnly = totalQuestions === 0;
+                    const scoreHtml = isEssayOnly
+                        ? `<b>${Number(item.essay_words)}</b><span>words written</span>`
+                        : `<b>${correctAnswers}</b><span>/ ${totalQuestions} correct answers</span>`;
                     row.innerHTML = `
                         <label class="history-check-wrap" onclick="event.stopPropagation()">
                             <input type="checkbox" class="history-check" value="${Number(item.id)}" onchange="syncHistorySelectAllState()">
                         </label>
-                        <div>
-                            <strong>${escapeHtml(formatHistoryStatus(item.status))}</strong>
-                            <span>${escapeHtml(dateLabel)}</span>
-                            ${historyModeLabel(item) ? `<span>${escapeHtml(historyModeLabel(item))}</span>` : ''}
+                        <div class="history-card-body">
+                            <div class="history-card-head">
+                                <strong>${escapeHtml(historyModeLabel(item) || 'Quiz')}</strong>
+                                <span class="history-badge">${escapeHtml(formatHistoryStatus(item.status))}</span>
+                            </div>
+                            <div class="history-card-score">${scoreHtml}</div>
+                            <div class="history-card-meta">${escapeHtml(dateLabel)}${isEssayOnly ? '' : ` &middot; ${Number(item.answered_count)} / ${totalQuestions} answered &middot; ${Number(item.essay_words)} words`}</div>
                         </div>
-                        <div>
-                            <strong>${Number(item.score)} / ${Number(item.max_score)}</strong>
-                            <span>${correctAnswers} correct, ${Number(item.answered_count)} / ${Number(item.total_questions)} answered, ${Number(item.essay_words)} words</span>
-                        </div>
-                        <div class="history-row-actions" onclick="event.stopPropagation()">
-                            <button class="history-delete-btn" onclick="deleteHistoryIds([${Number(item.id)}]).then(loadTestHistory)">Delete</button>
-                        </div>
+                        <button type="button" class="history-trash-btn" aria-label="Delete this result">${ICON_TRASH}</button>
                     `;
+                    row.querySelector('.history-trash-btn').addEventListener('click', event => {
+                        event.stopPropagation();
+                        askDeleteHistory([Number(item.id)]);
+                    });
                     row.onclick = () => openHistoryResult(item);
                     row.oncontextmenu = (event) => showHistoryContextMenu(event, item);
                     row.onkeydown = (event) => {

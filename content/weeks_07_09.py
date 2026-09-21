@@ -2,11 +2,7 @@
 
 W[7] = dict(
     title="Kazakhstan at the Beginning of the 20th Century",
-    essays=[
-        "Analyze the causes, course and consequences of the 1916 Central Asian uprising in Kazakhstan.",
-        "Explain the role of the Alash movement and the Alash-Orda government in the national movement of the Kazakhs.",
-        "Discuss how Jadidism, new-method schools and the press (Aiqap, Qazaq) contributed to the rise of the Kazakh intelligentsia.",
-    ],
+    essay="Explain the role of the Alash movement and the Alash-Orda government in the national movement of the Kazakhs.",
     q=[
         ("Which Crimean Tatar educator is regarded as the father of Jadidism?", "Ismail Gasprinski", "Mustafa Shokay", "Ibray Altynsarin", "Chokan Valikhanov"),
         ("Which teaching method gave Jadidism its name (usul-i jadid)?", "The new phonetic method of teaching", "The old memorization method", "The military drill method", "Teaching in Latin only"),
@@ -33,11 +29,7 @@ W[7] = dict(
 
 W[8] = dict(
     title="Midterm Review of Weeks 1 to 7",
-    essays=[
-        "Describe the main stages of Kazakhstan's history from the Stone Age to the Kazakh Khanate.",
-        "What were the main stages of Kazakhstan's incorporation into the Russian Empire, and how did the Kazakh people resist?",
-        "What was the role of the 1916 uprising and the Alash movement in the national liberation struggle of the Kazakhs?",
-    ],
+    essay="Explain the main stages of Kazakhstan's incorporation into the Russian Empire and how the Kazakh people resisted.",
     q=[
         ("Which sequence lists these periods correctly, earliest first?", "Stone Age, Bronze Age, Early Iron Age, Turkic era", "Bronze Age, Stone Age, Early Iron Age, Turkic era", "Early Iron Age, Stone Age, Bronze Age, Turkic era", "Turkic era, Stone Age, Bronze Age, Early Iron Age"),
         ("Which sequence lists these states correctly, earliest first?", "Turkic Khaganate, Golden Horde, Kazakh Khanate, Alash-Orda", "Golden Horde, Turkic Khaganate, Kazakh Khanate, Alash-Orda", "Kazakh Khanate, Turkic Khaganate, Alash-Orda, Golden Horde", "Alash-Orda, Kazakh Khanate, Golden Horde, Turkic Khaganate"),
@@ -64,11 +56,7 @@ W[8] = dict(
 
 W[9] = dict(
     title="Civil War and Kazakhstan in the 1920s",
-    essays=[
-        "Describe the Civil War in Kazakhstan (1918-1920): the establishment of Soviet power, the Red and White forces, partisan movements and local resistance.",
-        "Explain the formation of Kazakh statehood within the USSR, from the Kyrgyz ASSR (1920) to the national-territorial delimitation of 1924-1925.",
-        "Assess the New Economic Policy in Kazakhstan, its achievements and contradictions, and the cultural developments of the 1920s.",
-    ],
+    essay="Explain how the Kyrgyz ASSR (1920) and the national-territorial delimitation of 1924-1925 shaped Kazakh statehood.",
     q=[
         ("Which White admiral headed the anti-Bolshevik government based in Omsk?", "Alexander Kolchak", "Anton Denikin", "Pyotr Wrangel", "Lavr Kornilov"),
         ("Which Red commander led the Turkestan Front in 1919-1920?", "Mikhail Frunze", "Leon Trotsky", "Semyon Budyonny", "Alexander Kolchak"),

@@ -2,11 +2,7 @@
 
 W[1] = dict(
     title="Introduction and Prehistoric Kazakhstan",
-    essays=[
-        "Describe the main stages of the Stone Age and the Bronze Age in Kazakhstan and the archaeological evidence for each stage.",
-        "Explain why the Botai culture is considered important for the history of horse domestication and for the origins of nomadic civilization.",
-        "Discuss how the Andronovo and Begazy-Dandybai cultures shaped the Bronze Age of the steppe and prepared the ground for nomadic civilization.",
-    ],
+    essay="Explain why the Botai culture is important for the history of horse domestication and for the origins of nomadic civilization.",
     q=[
         ("Which alloy gave the Bronze Age its name?", "Copper mixed with tin", "Iron mixed with carbon", "Gold mixed with silver", "Lead mixed with zinc"),
         ("Which metal was the first to be widely worked by people during the Eneolithic?", "Copper", "Iron", "Aluminium", "Steel"),
@@ -33,11 +29,7 @@ W[1] = dict(
 
 W[2] = dict(
     title="The Early Iron Age in Kazakhstan",
-    essays=[
-        "Analyze the political organization, economy and culture of the Saka tribes, and explain the significance of Saka animal-style art.",
-        "Discuss the political history of the Hun Empire in Central Asia and its consequences for Eurasian history.",
-        "Explain how the Usuns, Kangly and Sarmatians contributed to regional dynamics and to the ethnogenesis of the peoples of the steppe.",
-    ],
+    essay="Explain the significance of Saka animal-style art and burial mounds for understanding the culture of the Early Iron Age.",
     q=[
         ("In which year was the Issyk kurgan with the 'Golden Man' burial excavated?", "1969", "1937", "1956", "1991"),
         ("Who led the 1969 excavation that uncovered the Issyk 'Golden Man' burial?", "Kemal Akishev", "Alkey Margulan", "Lev Gumilev", "Nikolai Yadrintsev"),
@@ -64,11 +56,7 @@ W[2] = dict(
 
 W[3] = dict(
     title="Kazakhstan in the Turkic Era",
-    essays=[
-        "Explain the origins, rise and consolidation of power of the Great Turkic Khaganate and assess its historical significance.",
-        "Analyze the role of the Great Silk Road in the economy, urbanization and cultural exchange of Kazakhstan in the Turkic era.",
-        "Discuss the Muslim Renaissance in Central Asia and the contribution of outstanding Turkic scholars such as al-Farabi, Yusuf Balasaguni and Mahmud al-Kashgari.",
-    ],
+    essay="Explain the role of the Great Silk Road in the economy, urbanization and cultural exchange of Kazakhstan in the Turkic era.",
     q=[
         ("Which nomadic power did Bumin Khan overthrow in 552 to found the Turkic Khaganate?", "The Rouran", "The Xiongnu", "The Tang Dynasty", "The Sassanids"),
         ("Which relative of Bumin ruled the western Turkic lands and dealt with Persia and Byzantium?", "Istemi Yabgu", "Bilge Khan", "Kul-Tegin", "Tonyukuk"),

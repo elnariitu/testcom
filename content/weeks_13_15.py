@@ -2,11 +2,7 @@
 
 W[13] = dict(
     title="The Formation of Independent Kazakhstan",
-    essays=[
-        "Explain the causes of the collapse of the USSR in 1991 and the declaration of independence of Kazakhstan on December 16, 1991.",
-        "Analyze Kazakhstan's socio-economic modernization: the transition to a market economy in the 1990s, privatization, the agricultural crisis and economic stabilization in the 2000s.",
-        "Discuss nation-building in independent Kazakhstan: the Assembly of People of Kazakhstan, interreligious dialogue, the Bolashak program and the preservation of national heritage (Madeni Mura).",
-    ],
+    essay="Explain the collapse of the USSR and the declaration of independence of Kazakhstan on December 16, 1991.",
     q=[
         ("Which document of December 21, 1991 enlarged the CIS to include Kazakhstan?", "The Alma-Ata Declaration", "The Belovezha Accords", "The Helsinki Act", "The Treaty of Nerchinsk"),
         ("On which date did Kazakhstan declare its independence?", "December 16, 1991", "October 25, 1990", "August 30, 1995", "March 17, 1991"),
@@ -33,11 +29,7 @@ W[13] = dict(
 
 W[14] = dict(
     title="Kazakhstan in New Geo-Economic and Geo-Political Conditions",
-    essays=[
-        "What is the essence of the multi-vector foreign policy of Kazakhstan? Provide examples.",
-        "Analyze the Eurasian idea and Kazakhstan's role in integration, from the CIS to the Eurasian Economic Union.",
-        "Assess Kazakhstan's bilateral relations with European countries, Islamic countries and the major powers (the USA, China and Russia).",
-    ],
+    essay="Explain the essence of Kazakhstan's multi-vector foreign policy and give two examples.",
     q=[
         ("What does 'multi-vector' foreign policy mean?", "Balanced, pragmatic relations with several major powers at once", "An alliance with a single superpower", "Isolation from all neighbours", "Membership only in military blocs"),
         ("In which city and year did Nazarbayev propose the idea of a Eurasian Union?", "Moscow, 1994", "Beijing, 1991", "Astana, 2010", "Washington, 2002"),
@@ -64,11 +56,7 @@ W[14] = dict(
 
 W[15] = dict(
     title="New Kazakhstan Renewal and Modernization",
-    essays=[
-        "Describe the goals and directions of the 'Rukhani Zhangyru' (Spiritual Renewal) program.",
-        "Explain the idea of 'New Kazakhstan' (Zhana Qazaqstan) and the current socio-political reforms.",
-        "Analyze democratization, decentralization, anti-corruption and justice reforms in 2022-2025 under the strategy 'Fair State, Prosperous Society, Strong Nation'.",
-    ],
+    essay="Explain the idea of 'New Kazakhstan' (Zhana Qazaqstan) and two of its main reforms.",
     q=[
         ("In which year did Kassym-Jomart Tokayev become President of Kazakhstan?", "2019", "1991", "2011", "2022"),
         ("Which events in early January 2022 preceded the push for 'New Kazakhstan' reforms?", "Mass protests and violent unrest", "A nuclear accident", "A world war", "A Mongol invasion"),
