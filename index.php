@@ -16,7 +16,7 @@
             if (theme !== 'light') document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="style.css?v=58">
+    <link rel="stylesheet" href="style.css?v=59">
     <link rel="stylesheet" href="games.css?v=3">
     <link rel="stylesheet" href="mafia.css?v=1">
 </head>
@@ -39,12 +39,6 @@
             <span class="maten-watermark-by">by Maten services</span>
             <span class="maten-watermark-url">https://maten.pro</span>
         </div>
-    </div>
-
-    <!-- Decorative watermark: IITU logo + course code, home page background only, not clickable -->
-    <div class="itu-watermark" aria-hidden="true">
-        <img src="assets/itu-logo.png" alt="" draggable="false">
-        <span class="itu-watermark-text">IT3-MKM2603</span>
     </div>
 
     <audio id="bg-music" src="Music/General.mp3" loop preload="auto"></audio>
@@ -186,11 +180,21 @@
             <li><button class="menu-item" onclick="openPromoModal()"><span class="icon-svg" id="promo-icon"></span> <span data-i18n="menu_promo">Promo Code</span></button></li>
             <li><button class="menu-item" id="history-menu-btn" onclick="openHistoryModal()"><span class="icon-svg" id="history-icon"></span> <span data-i18n="history_title">Test History</span></button></li>
             <li><button class="menu-item hidden" id="admin-panel-menu-btn" onclick="openAdminPanel()"><span class="icon-svg" id="admin-panel-icon"></span> <span data-i18n="menu_admin_panel">Admin Panel</span></button></li>
+            <li><button class="menu-item" onclick="openDesignModal()"><span class="icon-svg" id="design-icon"></span> <span data-i18n="menu_theme_label">Design</span></button></li>
             <li class="menu-devs" aria-hidden="true">
                 <div class="menu-devs-title">Разработчики сайта</div>
-                <div class="menu-devs-list">Erkebulan, Damir, Elnar, Ilias, Sultan, Sanzhar</div>
+                <div class="menu-devs-ticker">
+                    <ul class="menu-devs-names">
+                        <li>Erkebulan</li>
+                        <li>Damir</li>
+                        <li>Elnar</li>
+                        <li>Ilias</li>
+                        <li>Sultan</li>
+                        <li>Sanzhar</li>
+                        <li>Erkebulan</li>
+                    </ul>
+                </div>
             </li>
-            <li><button class="menu-item" onclick="openDesignModal()"><span class="icon-svg" id="design-icon"></span> <span data-i18n="menu_theme_label">Design</span></button></li>
         </ul>
     </div>
 
@@ -332,6 +336,11 @@
 
         <!-- Start: mode carousel (Quiz / Essay / Weekly Test / Game) -->
         <div id="start-screen" class="hidden">
+            <!-- Decorative watermark: IITU logo + course code, not clickable -->
+            <div class="itu-watermark" aria-hidden="true">
+                <img src="assets/itu-logo.png" alt="" draggable="false">
+                <span class="itu-watermark-text">IT3-MKM2601</span>
+            </div>
             <p id="welcome-text"></p>
             <div class="mode-carousel" id="mode-carousel">
                 <button class="mode-arrow mode-arrow-left" onclick="rotateMode(-1)" aria-label="Previous mode"><span class="icon-svg" id="mode-prev-icon"></span></button>
