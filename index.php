@@ -1249,7 +1249,9 @@
                 item.setAttribute('aria-selected', i === active ? 'true' : 'false');
             });
             const data = (typeof WEEKLY_TESTS !== 'undefined') ? WEEKLY_TESTS[active + 1] : null;
-            weekWheelCaption.textContent = data ? (weekPickerMode === 'essay' ? data.essay : data.title) : 'Weekly tests are not available right now.';
+            weekWheelCaption.textContent = data
+                ? (weekPickerMode === 'essay' ? 'One of ' + data.essays.length + ' possible topics is given at random when you start.' : data.title)
+                : 'Weekly tests are not available right now.';
         }
 
         function confirmWeekPicker() {
@@ -1942,7 +1944,8 @@
         let runEssayTopic = '';
 
         function pickWeekEssay(week) {
-            return WEEKLY_TESTS[week].essay;
+            const topics = WEEKLY_TESTS[week].essays;
+            return topics[Math.floor(Math.random() * topics.length)];
         }
 
         function startQuiz() {

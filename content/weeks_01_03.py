@@ -2,7 +2,12 @@
 
 W[1] = dict(
     title="Introduction and Prehistoric Kazakhstan",
-    essay="Explain why the Botai culture is important for the history of horse domestication and for the origins of nomadic civilization.",
+    essays=[
+        "Explain why the Botai culture is important for the history of horse domestication and for the origins of nomadic civilization.",
+        "Explain how archaeological sources such as petroglyphs, kurgans and pottery help historians reconstruct the life of Stone and Bronze Age communities in Kazakhstan.",
+        "Explain the significance of the Andronovo culture for the Bronze Age history of Kazakhstan and its links to Indo-Iranian peoples.",
+        "Explain the aims of the History of Kazakhstan course and why the study of prehistoric sources matters for understanding the nation's past.",
+    ],
     q=[
         ("Which alloy gave the Bronze Age its name?", "Copper mixed with tin", "Iron mixed with carbon", "Gold mixed with silver", "Lead mixed with zinc"),
         ("Which metal was the first to be widely worked by people during the Eneolithic?", "Copper", "Iron", "Aluminium", "Steel"),
@@ -29,7 +34,12 @@ W[1] = dict(
 
 W[2] = dict(
     title="The Early Iron Age in Kazakhstan",
-    essay="Explain the significance of Saka animal-style art and burial mounds for understanding the culture of the Early Iron Age.",
+    essays=[
+        "Explain the significance of Saka animal-style art and burial mounds for understanding the culture of the Early Iron Age.",
+        "Explain what the discovery of the Issyk 'Golden Man' reveals about Saka society, craftsmanship and beliefs.",
+        "Explain the role of the Sarmatians and Sakas in shaping the early nomadic history of western and southern Kazakhstan.",
+        "Explain how the rise of the Xiongnu and Hun confederations connects the history of Central Asia to events in China and Europe.",
+    ],
     q=[
         ("In which year was the Issyk kurgan with the 'Golden Man' burial excavated?", "1969", "1937", "1956", "1991"),
         ("Who led the 1969 excavation that uncovered the Issyk 'Golden Man' burial?", "Kemal Akishev", "Alkey Margulan", "Lev Gumilev", "Nikolai Yadrintsev"),
@@ -56,7 +66,12 @@ W[2] = dict(
 
 W[3] = dict(
     title="Kazakhstan in the Turkic Era",
-    essay="Explain the role of the Great Silk Road in the economy, urbanization and cultural exchange of Kazakhstan in the Turkic era.",
+    essays=[
+        "Explain the role of the Great Silk Road in the economy, urbanization and cultural exchange of Kazakhstan in the Turkic era.",
+        "Explain the formation and significance of the Turkic Khaganate for the political history of the Eurasian steppe.",
+        "Explain the contribution of scholars such as al-Farabi, Yusuf Balasaguni and Mahmud al-Kashgari to Turkic and Islamic civilization.",
+        "Explain the importance of the Battle of Talas (751) for the cultural and religious history of Central Asia.",
+    ],
     q=[
         ("Which nomadic power did Bumin Khan overthrow in 552 to found the Turkic Khaganate?", "The Rouran", "The Xiongnu", "The Tang Dynasty", "The Sassanids"),
         ("Which relative of Bumin ruled the western Turkic lands and dealt with Persia and Byzantium?", "Istemi Yabgu", "Bilge Khan", "Kul-Tegin", "Tonyukuk"),

@@ -2,7 +2,12 @@
 
 W[4] = dict(
     title="The Great Steppe in the Golden Horde Period",
-    essay="Explain the role of Ak Orda (the White Horde) in the formation of Kazakh statehood.",
+    essays=[
+        "Explain the role of Ak Orda (the White Horde) in the formation of Kazakh statehood.",
+        "Explain how the Mongol conquest of Central Asia under Genghis Khan changed the political map of the steppe.",
+        "Explain the significance of the Golden Horde's administrative system, including the yarlyk and the yam, for governing its vast territories.",
+        "Explain how the breakup of the Chagatai Ulus and the rise of Moghulistan paved the way for the later Kazakh Khanate.",
+    ],
     q=[
         ("In which year was Temujin proclaimed Genghis Khan at a great kurultai?", "1206", "1219", "1240", "1256"),
         ("Which event triggered Genghis Khan's campaign against Khorezm in 1219?", "The execution of Mongol merchants and envoys at Otrar", "A Kipchak raid on the Mongol capital", "A dispute over Silk Road taxes with China", "The death of his son Juchi"),
@@ -29,7 +34,12 @@ W[4] = dict(
 
 W[5] = dict(
     title="The Kazakh Khanate from the 15th to the 18th Century",
-    essay="Explain the importance of Kasym Khan's law code, the Qasqa Zholy, for the Kazakh Khanate.",
+    essays=[
+        "Explain the importance of Kasym Khan's law code, the Qasqa Zholy, for the Kazakh Khanate.",
+        "Explain the social structure of the Kazakh Khanate, including the roles of the toré, the bi and the three zhuzes.",
+        "Explain the causes and consequences of the Dzungar invasions, including the Aktaban Shubyryndy, for the Kazakh people.",
+        "Explain the significance of Zhety Zhargy and the work of Tole Bi, Kazybek Bi and Aiteke Bi for Kazakh customary law.",
+    ],
     q=[
         ("In which year is the Kazakh Khanate traditionally said to have been founded?", "1465", "1428", "1723", "1822"),
         ("Where did Kerey and Janibek settle after leaving the state of Abulkhair?", "The Chu valley in Zhetysu (Moghulistan)", "The Ural steppe", "The Siberian forest zone", "The Caspian shore"),
@@ -56,7 +66,12 @@ W[5] = dict(
 
 W[6] = dict(
     title="Kazakhstan in the 18th to Early 20th Centuries",
-    essay="Explain why the power of the khans was abolished in the 1820s and what changed after the 1822 and 1824 charters.",
+    essays=[
+        "Explain why the power of the khans was abolished in the 1820s and what changed after the 1822 and 1824 charters.",
+        "Explain the causes and course of Kenesary Kasymuly's uprising and its place in Kazakh resistance to colonial rule.",
+        "Explain how the Steppe Regulations of 1891 and Stolypin's resettlement policy changed land use and Kazakh society.",
+        "Explain how Chokan Valikhanov and Ibray Altynsarin contributed to Kazakh scholarship and education in the 19th century.",
+    ],
     q=[
         ("In which year did Khan Abulkhair of the Junior Zhuz accept Russian protection?", "1731", "1723", "1822", "1868"),
         ("Which Russian empress accepted the Junior Zhuz's request for protection in 1731?", "Anna Ioannovna", "Catherine II", "Elizabeth", "Peter I"),

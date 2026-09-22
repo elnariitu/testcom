@@ -2,7 +2,12 @@
 
 W[7] = dict(
     title="Kazakhstan at the Beginning of the 20th Century",
-    essay="Explain the role of the Alash movement and the Alash-Orda government in the national movement of the Kazakhs.",
+    essays=[
+        "Explain the role of the Alash movement and the Alash-Orda government in the national movement of the Kazakhs.",
+        "Explain the causes of the 1916 uprising and its significance for the Kazakh national movement.",
+        "Explain how Jadidism and the Kazakh press, such as Aiqap and Qazaq, shaped a modern national consciousness before 1917.",
+        "Explain the aims of the Karkaraly Petition of 1905 and its place in the early Kazakh political movement.",
+    ],
     q=[
         ("Which Crimean Tatar educator is regarded as the father of Jadidism?", "Ismail Gasprinski", "Mustafa Shokay", "Ibray Altynsarin", "Chokan Valikhanov"),
         ("Which teaching method gave Jadidism its name (usul-i jadid)?", "The new phonetic method of teaching", "The old memorization method", "The military drill method", "Teaching in Latin only"),
@@ -29,7 +34,12 @@ W[7] = dict(
 
 W[8] = dict(
     title="Midterm Review of Weeks 1 to 7",
-    essay="Explain the main stages of Kazakhstan's incorporation into the Russian Empire and how the Kazakh people resisted.",
+    essays=[
+        "Explain the main stages of Kazakhstan's incorporation into the Russian Empire and how the Kazakh people resisted.",
+        "Trace the main stages of Kazakh statehood from the Turkic Khaganate to the Kazakh Khanate, explaining what each stage contributed.",
+        "Compare the causes and outcomes of at least two Kazakh uprisings against Russian rule discussed in weeks 1 to 7.",
+        "Explain how nomadic culture and statehood evolved from the Bronze Age to the eve of the 20th century.",
+    ],
     q=[
         ("Which sequence lists these periods correctly, earliest first?", "Stone Age, Bronze Age, Early Iron Age, Turkic era", "Bronze Age, Stone Age, Early Iron Age, Turkic era", "Early Iron Age, Stone Age, Bronze Age, Turkic era", "Turkic era, Stone Age, Bronze Age, Early Iron Age"),
         ("Which sequence lists these states correctly, earliest first?", "Turkic Khaganate, Golden Horde, Kazakh Khanate, Alash-Orda", "Golden Horde, Turkic Khaganate, Kazakh Khanate, Alash-Orda", "Kazakh Khanate, Turkic Khaganate, Alash-Orda, Golden Horde", "Alash-Orda, Kazakh Khanate, Golden Horde, Turkic Khaganate"),
@@ -56,7 +66,12 @@ W[8] = dict(
 
 W[9] = dict(
     title="Civil War and Kazakhstan in the 1920s",
-    essay="Explain how the Kyrgyz ASSR (1920) and the national-territorial delimitation of 1924-1925 shaped Kazakh statehood.",
+    essays=[
+        "Explain how the Kyrgyz ASSR (1920) and the national-territorial delimitation of 1924-1925 shaped Kazakh statehood.",
+        "Explain the impact of the Civil War and the famine of 1921-1922 on Kazakhstan's population and economy.",
+        "Explain the policy of korenizatsiya and its effects on Kazakh language, culture and administration in the 1920s.",
+        "Explain what happened to the Alash-Orda leaders after the Civil War and how Soviet power was consolidated in Kazakhstan.",
+    ],
     q=[
         ("Which White admiral headed the anti-Bolshevik government based in Omsk?", "Alexander Kolchak", "Anton Denikin", "Pyotr Wrangel", "Lavr Kornilov"),
         ("Which Red commander led the Turkestan Front in 1919-1920?", "Mikhail Frunze", "Leon Trotsky", "Semyon Budyonny", "Alexander Kolchak"),

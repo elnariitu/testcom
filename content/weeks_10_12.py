@@ -2,7 +2,12 @@
 
 W[10] = dict(
     title="Industrialization and Collectivization",
-    essay="Explain the main features of collectivization in Kazakhstan and its consequences for the Kazakh people.",
+    essays=[
+        "Explain the main features of collectivization in Kazakhstan and its consequences for the Kazakh people.",
+        "Explain how industrialization, including the Turksib railway and the growth of Karaganda, transformed Kazakhstan's economy.",
+        "Explain the causes and scale of the famine of 1931-1933 and its demographic impact on the Kazakh people.",
+        "Explain the political repression of the Kazakh intelligentsia in the 1930s and its long-term effects.",
+    ],
     q=[
         ("Which years did the First Five-Year Plan of the USSR cover?", "1928-1932", "1921-1925", "1941-1945", "1953-1958"),
         ("The Turksib railway connected Turkestan with which region?", "Siberia", "The Caucasus", "The Volga region", "Manchuria"),
@@ -29,7 +34,12 @@ W[10] = dict(
 
 W[11] = dict(
     title="Kazakhstan in the Great Patriotic War and Postwar Years",
-    essay="Explain Kazakhstan's contribution to victory in the Great Patriotic War (1941-1945).",
+    essays=[
+        "Explain Kazakhstan's contribution to victory in the Great Patriotic War (1941-1945).",
+        "Explain the causes, scale and long-term consequences of the Virgin Lands campaign begun in 1954.",
+        "Explain the environmental and human costs of nuclear testing at the Semipalatinsk site.",
+        "Explain why so many peoples were deported to Kazakhstan during and after the Second World War and how this shaped its population.",
+    ],
     q=[
         ("About how many people from Kazakhstan fought at the front in the Great Patriotic War?", "About 1.2 million", "About 120,000", "About 12 million", "About 12,000"),
         ("Which division, formed in Alma-Ata, fought in the defence of Moscow in 1941?", "The 316th Rifle Division (Panfilov's)", "The Alash Division", "The Turgai Corps", "The Golden Horde Regiment"),
@@ -56,7 +66,12 @@ W[11] = dict(
 
 W[12] = dict(
     title="Kazakhstan from 1965 to 1991",
-    essay="Explain the causes and historical significance of the December 1986 events in Almaty.",
+    essays=[
+        "Explain the causes and historical significance of the December 1986 events in Almaty.",
+        "Explain how Gorbachev's policies of perestroika and glasnost affected political life in Kazakhstan.",
+        "Explain the significance of the 1989 Law on Languages and the Declaration of State Sovereignty of October 1990.",
+        "Explain why the Brezhnev era is often described as a period of 'stagnation' and how this affected Kazakhstan.",
+    ],
     q=[
         ("Who led the Communist Party of Kazakhstan from 1964 to 1986?", "Dinmukhamed Kunayev", "Gennady Kolbin", "Nursultan Nazarbayev", "Leonid Brezhnev"),
         ("Who replaced Dinmukhamed Kunayev as Kazakh party leader in December 1986?", "Gennady Kolbin", "Nursultan Nazarbayev", "Mikhail Gorbachev", "Olzhas Suleimenov"),
