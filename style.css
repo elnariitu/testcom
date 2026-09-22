@@ -1112,15 +1112,43 @@ body.admin-copy-enabled * {
     font-size: 0.84rem;
     line-height: 1.15;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .menu-item .icon-svg {
     flex: 0 0 auto;
 }
 
-.menu-item:hover {
-    filter: brightness(0.97);
+.menu-item:hover,
+.menu-item:focus-visible {
+    /* The real highlight (background + ring) is forced further down with !important,
+       since later rules in this file strip .menu-item's background/border/shadow when
+       the menu panel is open. This nudge still works here. */
+    transform: translateX(3px);
+}
+
+/* Site developers credit: decorative, not a button */
+.menu-devs {
+    padding: 10px 12px;
+    background: var(--menu-item-bg);
+    border: 1px solid var(--menu-item-border);
+    border-radius: 10px;
+    cursor: default;
+}
+
+.menu-devs-title {
+    font-weight: 700;
+    font-size: 0.76rem;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.menu-devs-list {
+    font-weight: 600;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: var(--text);
 }
 
 .menu-theme-row {
@@ -2194,7 +2222,8 @@ body.admin-copy-enabled * {
     .menu-panel.hidden h3,
     .menu-panel.hidden .menu-theme-label,
     .menu-panel.hidden .menu-theme-row .lang-switch,
-    .menu-panel.hidden .menu-item span:last-child {
+    .menu-panel.hidden .menu-item span:last-child,
+    .menu-panel.hidden .menu-devs {
         display: none !important;
     }
 
@@ -2363,6 +2392,15 @@ body:has(#menu-panel:not(.hidden)) #mute-btn {
 body:has(#menu-panel:not(.hidden)) #mute-btn { opacity:0 !important; visibility:hidden !important; pointer-events:none !important; }
 .menu-panel h3 { display:none !important; }
 
+/* Clear hover/selection highlight on menu buttons: wins over the flat, borderless
+   styling above (phone drawer, desktop open panel and desktop collapsed icon rail alike). */
+.menu-panel .menu-item:hover,
+.menu-panel .menu-item:focus-visible {
+    background: var(--menu-item-bg) !important;
+    box-shadow: inset 0 0 0 2px var(--accent-orange) !important;
+    border-radius: 10px !important;
+}
+
 @media (min-width: 900px) {
     .menu-panel ul { gap:8px !important; margin:0 !important; }
     .menu-panel li { height:64px !important; }
@@ -2478,6 +2516,62 @@ body.admin-copy-enabled .maten-watermark * {
 @media (min-width: 900px) {
     .maten-watermark {
         left: 102px;
+    }
+}
+
+/* IITU logo + course code watermark: top-center background, home page only, not clickable */
+.itu-watermark {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+body:has(#start-screen:not(.hidden)) .itu-watermark {
+    display: flex;
+}
+
+body.admin-copy-enabled .itu-watermark,
+body.admin-copy-enabled .itu-watermark * {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.itu-watermark img {
+    display: block;
+    height: 44px;
+    width: auto;
+    -webkit-user-drag: none;
+}
+
+.itu-watermark-text {
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    color: var(--text);
+}
+
+@media (max-width: 560px) {
+    .itu-watermark {
+        top: 10px;
+        gap: 6px;
+    }
+
+    .itu-watermark img {
+        height: 30px;
+    }
+
+    .itu-watermark-text {
+        font-size: 0.7rem;
     }
 }
 

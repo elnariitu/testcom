@@ -16,7 +16,7 @@
             if (theme !== 'light') document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="style.css?v=57">
+    <link rel="stylesheet" href="style.css?v=58">
     <link rel="stylesheet" href="games.css?v=3">
     <link rel="stylesheet" href="mafia.css?v=1">
 </head>
@@ -39,6 +39,12 @@
             <span class="maten-watermark-by">by Maten services</span>
             <span class="maten-watermark-url">https://maten.pro</span>
         </div>
+    </div>
+
+    <!-- Decorative watermark: IITU logo + course code, home page background only, not clickable -->
+    <div class="itu-watermark" aria-hidden="true">
+        <img src="assets/itu-logo.png" alt="" draggable="false">
+        <span class="itu-watermark-text">IT3-MKM2603</span>
     </div>
 
     <audio id="bg-music" src="Music/General.mp3" loop preload="auto"></audio>
@@ -177,10 +183,14 @@
             <li><button class="menu-item" onclick="goHome()"><span class="icon-svg" id="home-icon"></span> <span data-i18n="menu_home">Home</span></button></li>
             <li><button class="menu-item" onclick="openMusicModal()"><span class="icon-svg" id="music-icon"></span> <span data-i18n="menu_music_label">Music</span></button></li>
             <li><button class="menu-item" onclick="renameFromMenu()"><span class="icon-svg" id="rename-icon"></span> <span data-i18n="menu_rename">Rename</span></button></li>
-            <li><button class="menu-item" onclick="openDesignModal()"><span class="icon-svg" id="design-icon"></span> <span data-i18n="menu_theme_label">Design</span></button></li>
             <li><button class="menu-item" onclick="openPromoModal()"><span class="icon-svg" id="promo-icon"></span> <span data-i18n="menu_promo">Promo Code</span></button></li>
             <li><button class="menu-item" id="history-menu-btn" onclick="openHistoryModal()"><span class="icon-svg" id="history-icon"></span> <span data-i18n="history_title">Test History</span></button></li>
             <li><button class="menu-item hidden" id="admin-panel-menu-btn" onclick="openAdminPanel()"><span class="icon-svg" id="admin-panel-icon"></span> <span data-i18n="menu_admin_panel">Admin Panel</span></button></li>
+            <li class="menu-devs" aria-hidden="true">
+                <div class="menu-devs-title">Разработчики сайта</div>
+                <div class="menu-devs-list">Erkebulan, Damir, Elnar, Ilias, Sultan, Sanzhar</div>
+            </li>
+            <li><button class="menu-item" onclick="openDesignModal()"><span class="icon-svg" id="design-icon"></span> <span data-i18n="menu_theme_label">Design</span></button></li>
         </ul>
     </div>
 
@@ -2937,7 +2947,7 @@
                 nickname_placeholder: "Сіздің атыңыз", nickname_ready: "ДАЙЫН!",
                 start_title: "Қазақстан тарихы бойынша тест және эссе",
                 start_subtitle: "Ағылшын тіліндегі тест (сұраққа 15 сек) + Соңғы эссе (20 минут)", start_button: "ТЕСТТІ БАСТАУ", mode_start: "БАСТАУ",
-                menu_title: "Мәзір", menu_home: "Главный", menu_toggle_sound: "Дыбысты қосу/өшіру", menu_theme_label: "Дизайн", menu_rename: "Атын өзгерту", menu_promo: "Промокод", menu_games: "Ойындар",
+                menu_title: "Мәзір", menu_home: "Главный", menu_toggle_sound: "Дыбысты қосу/өшіру", menu_theme_label: "Оформление", menu_rename: "Атын өзгерту", menu_promo: "Промокод", menu_games: "Ойындар",
                 menu_admin_panel: "Админ панелі", menu_restart: "Қайта бастау",
                 design_modal_title: "Дизайн таңдау", design_modal_subtitle: "Сайтқа ұнайтын көріністі таңдаңыз.",
                 essay_title: "Соңғы тапсырма: тарихи эссе", essay_submit: "ЭССЕНІ ЖІБЕРУ",
@@ -2958,7 +2968,7 @@
                 nickname_placeholder: "Ваш ник", nickname_ready: "ГОТОВО!",
                 start_title: "Тест и эссе по истории Казахстана",
                 start_subtitle: "Тест на английском (15 сек на вопрос) + Финальное эссе (20 минут)", start_button: "НАЧАТЬ ТЕСТ", mode_start: "СТАРТ",
-                menu_title: "Меню", menu_home: "Главный", menu_toggle_sound: "Вкл/выкл звук", menu_theme_label: "Дизайн", menu_rename: "Изменить имя", menu_promo: "Промокод", menu_games: "Игры",
+                menu_title: "Меню", menu_home: "Главный", menu_toggle_sound: "Вкл/выкл звук", menu_theme_label: "Оформление", menu_rename: "Изменить имя", menu_promo: "Промокод", menu_games: "Игры",
                 menu_admin_panel: "Админ-панель", menu_restart: "Начать заново",
                 design_modal_title: "Выбор дизайна", design_modal_subtitle: "Выберите оформление сайта.",
                 essay_title: "Финальное задание: историческое эссе", essay_submit: "ОТПРАВИТЬ ЭССЕ",
