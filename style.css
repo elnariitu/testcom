@@ -1144,6 +1144,11 @@ body.admin-copy-enabled * {
     margin-bottom: 6px;
 }
 
+.menu-devs-code {
+    color: #ff3b3b;
+    font-weight: 800;
+}
+
 /* Names auto-scroll one at a time: a vertical strip of <li>s, clipped to one line,
    slid up by CSS animation. The list repeats its first name at the end so the loop
    wraps seamlessly back to the top. */
@@ -2600,6 +2605,11 @@ body:has(#lobby-page:not(.hidden)) .site-course-brand {
     display: flex;
 }
 
+body:has(.game-page:not(.hidden)) .site-course-brand,
+body.mf-open .site-course-brand {
+    display: none !important;
+}
+
 body.admin-copy-enabled .site-course-brand,
 body.admin-copy-enabled .site-course-brand * {
     user-select: none;
@@ -2611,7 +2621,7 @@ body.admin-copy-enabled .site-course-brand * {
     height: 44px;
     width: auto;
     opacity: 1;
-    filter: brightness(1.22) saturate(1.18) drop-shadow(0 0 7px rgba(255, 255, 255, 0.3));
+    filter: none;
     -webkit-user-drag: none;
 }
 
@@ -2620,8 +2630,8 @@ body.admin-copy-enabled .site-course-brand * {
     font-size: 0.95rem;
     letter-spacing: 0.03em;
     color: var(--text);
-    opacity: 0.92;
-    text-shadow: 0 0 10px color-mix(in srgb, var(--text) 32%, transparent);
+    opacity: 0.62;
+    text-shadow: none;
 }
 
 @media (max-width: 560px) {
