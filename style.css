@@ -2874,13 +2874,24 @@ body.admin-copy-enabled .site-course-brand * {
 }
 
 @media (max-width: 560px) {
+    /* Smaller stage on phones: the whole home/game-type picker fits one screen,
+       so the page never needs to scroll (no more "wobble" while swiping cards). */
+    .mode-carousel {
+        margin: -30px auto -30px;
+        padding: 40px 0;
+    }
+
+    .mode-stage {
+        height: clamp(170px, 38vw, 230px);
+    }
+
     .mode-card {
-        width: min(64%, 420px);
+        width: min(54%, 260px);
     }
 
     .mode-arrow {
-        width: 42px;
-        height: 42px;
+        width: 38px;
+        height: 38px;
     }
 
     .mode-start-btn {
@@ -3346,6 +3357,17 @@ html, body {
 
 .mode-start-btn {
     margin-top: 6px;
+}
+
+@media (max-width: 560px) {
+    .mode-name {
+        margin-top: 8px;
+        font-size: 1.2rem;
+    }
+
+    .mode-start-btn {
+        margin-top: 4px;
+    }
 }
 
 /* ---------- Result: who took the test + a soft light behind ---------- */
