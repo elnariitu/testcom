@@ -2702,15 +2702,15 @@ body.admin-copy-enabled .site-course-brand * {
 
 .mode-card.is-left {
     transform: translateX(calc(-50% - 78%)) scale(0.58);
-    opacity: 0.88;
-    filter: none;
+    opacity: 0.82;
+    filter: blur(3px);
     z-index: 2;
 }
 
 .mode-card.is-right {
     transform: translateX(calc(-50% + 78%)) scale(0.58);
-    opacity: 0.88;
-    filter: none;
+    opacity: 0.82;
+    filter: blur(3px);
     z-index: 2;
 }
 

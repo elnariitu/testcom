@@ -16,7 +16,7 @@
             if (theme !== 'light') document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="style.css?v=61">
+    <link rel="stylesheet" href="style.css?v=62">
     <link rel="stylesheet" href="games.css?v=3">
     <link rel="stylesheet" href="mafia.css?v=1">
 </head>
@@ -1146,14 +1146,15 @@
             modeName.classList.add('swap');
         }
 
-        /* Side pictures rest at the page edges, so a new mode slides in from the edge to the centre */
+        /* Side pictures sit fully inside the stage (never cropped by its edge), just short of it,
+           so a new mode slides in from just off both sides to the centre. */
         function updateModeMetrics(stage) {
             stage = stage || modeStage;
             const stageWidth = stage.clientWidth;
             const card = stage.querySelector('.mode-card.is-center');
             if (!stageWidth || !card) return;
             const previewWidth = card.offsetWidth * 0.58;
-            stage.style.setProperty('--preview-shift', Math.round(stageWidth / 2 - previewWidth * 0.25) + 'px');
+            stage.style.setProperty('--preview-shift', Math.round(stageWidth / 2 - previewWidth * 0.5 - 4) + 'px');
         }
         window.addEventListener('resize', () => {
             updateModeMetrics(modeStage);
