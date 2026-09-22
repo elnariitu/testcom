@@ -2638,7 +2638,8 @@ body.admin-copy-enabled .site-course-brand * {
 
 @media (max-width: 560px) {
     .site-course-brand {
-        top: 17px;
+        /* Below the menu/sound and account/JOIN buttons, so it's never hidden behind them */
+        top: 70px;
         gap: 6px;
     }
 
