@@ -2484,39 +2484,43 @@ body:has(#menu-panel:not(.hidden)) #mute-btn { opacity:0 !important; visibility:
     border-radius: 10px !important;
 }
 
+/* Open menu items: the same clean, big-icon flat list on phone/tablet as on desktop.
+   (Only the collapsed 88px icon rail below stays desktop-only - phones just fully
+   hide the closed menu instead, they have no rail state.) */
+.menu-panel ul { gap:8px !important; margin:0 !important; }
+.menu-panel li { height:64px !important; }
+.menu-panel .menu-item {
+    width:100% !important;
+    height:64px !important;
+    min-height:64px !important;
+    padding:0 !important;
+    gap:0 !important;
+    justify-content:flex-start !important;
+    background:transparent !important;
+    border:none !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    font-size:17px !important;
+}
+.menu-panel .menu-item > .icon-svg {
+    width:58px !important;
+    min-width:58px !important;
+    height:64px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    flex:0 0 58px !important;
+}
+.menu-panel .menu-item > .icon-svg svg {
+    width:26px !important;
+    height:26px !important;
+}
+.menu-panel .menu-item > span:last-child {
+    margin-left:10px !important;
+    white-space:nowrap !important;
+}
+
 @media (min-width: 900px) {
-    .menu-panel ul { gap:8px !important; margin:0 !important; }
-    .menu-panel li { height:64px !important; }
-    .menu-panel .menu-item {
-        width:264px !important;
-        height:64px !important;
-        min-height:64px !important;
-        padding:0 !important;
-        gap:0 !important;
-        justify-content:flex-start !important;
-        background:transparent !important;
-        border:none !important;
-        border-radius:0 !important;
-        box-shadow:none !important;
-        font-size:17px !important;
-    }
-    .menu-panel .menu-item > .icon-svg {
-        width:58px !important;
-        min-width:58px !important;
-        height:64px !important;
-        display:flex !important;
-        align-items:center !important;
-        justify-content:center !important;
-        flex:0 0 58px !important;
-    }
-    .menu-panel .menu-item > .icon-svg svg {
-        width:26px !important;
-        height:26px !important;
-    }
-    .menu-panel .menu-item > span:last-child {
-        margin-left:10px !important;
-        white-space:nowrap !important;
-    }
     .menu-panel.hidden .menu-item > span:last-child { display:none !important; }
     .menu-panel.hidden .menu-item {
         width:58px !important;
