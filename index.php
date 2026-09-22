@@ -187,7 +187,7 @@
             <li><button class="menu-item hidden" id="admin-panel-menu-btn" onclick="openAdminPanel()"><span class="icon-svg" id="admin-panel-icon"></span> <span data-i18n="menu_admin_panel">Admin Panel</span></button></li>
             <li><button class="menu-item" onclick="openDesignModal()"><span class="icon-svg" id="design-icon"></span> <span data-i18n="menu_theme_label">Design</span></button></li>
             <li class="menu-devs" aria-hidden="true">
-                <div class="menu-devs-title">Разработчики сайта <span class="menu-devs-code">IITU-MKM2601</span></div>
+                <div class="menu-devs-title">Разработчики сайта</div>
                 <div class="menu-devs-ticker">
                     <ul class="menu-devs-names">
                         <li>Erkebulan</li>
@@ -196,6 +196,7 @@
                         <li>Ilias</li>
                         <li>Sultan</li>
                         <li>Sanzhar</li>
+                        <li class="menu-devs-code">IITU-MKM2601</li>
                         <li>Erkebulan</li>
                     </ul>
                 </div>

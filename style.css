@@ -1163,7 +1163,7 @@ body.admin-copy-enabled * {
     list-style: none;
     margin: 0;
     padding: 0;
-    animation: menuDevsTicker 12s ease-in-out infinite;
+    animation: menuDevsTicker 14s ease-in-out infinite;
 }
 
 .menu-devs-names li {
@@ -1195,18 +1195,20 @@ body.admin-copy-enabled * {
 
 @keyframes menuDevsTicker {
     0%      { transform: translateY(calc(-1 * var(--dev-item-h) * 0)); }
-    14.17%  { transform: translateY(calc(-1 * var(--dev-item-h) * 0)); }
-    16.67%  { transform: translateY(calc(-1 * var(--dev-item-h) * 1)); }
-    30.83%  { transform: translateY(calc(-1 * var(--dev-item-h) * 1)); }
-    33.33%  { transform: translateY(calc(-1 * var(--dev-item-h) * 2)); }
-    47.5%   { transform: translateY(calc(-1 * var(--dev-item-h) * 2)); }
-    50%     { transform: translateY(calc(-1 * var(--dev-item-h) * 3)); }
-    64.17%  { transform: translateY(calc(-1 * var(--dev-item-h) * 3)); }
-    66.67%  { transform: translateY(calc(-1 * var(--dev-item-h) * 4)); }
-    80.83%  { transform: translateY(calc(-1 * var(--dev-item-h) * 4)); }
-    83.33%  { transform: translateY(calc(-1 * var(--dev-item-h) * 5)); }
-    97.5%   { transform: translateY(calc(-1 * var(--dev-item-h) * 5)); }
-    100%    { transform: translateY(calc(-1 * var(--dev-item-h) * 6)); }
+    12.14%  { transform: translateY(calc(-1 * var(--dev-item-h) * 0)); }
+    14.29%  { transform: translateY(calc(-1 * var(--dev-item-h) * 1)); }
+    26.43%  { transform: translateY(calc(-1 * var(--dev-item-h) * 1)); }
+    28.57%  { transform: translateY(calc(-1 * var(--dev-item-h) * 2)); }
+    40.71%  { transform: translateY(calc(-1 * var(--dev-item-h) * 2)); }
+    42.86%  { transform: translateY(calc(-1 * var(--dev-item-h) * 3)); }
+    55%     { transform: translateY(calc(-1 * var(--dev-item-h) * 3)); }
+    57.14%  { transform: translateY(calc(-1 * var(--dev-item-h) * 4)); }
+    69.29%  { transform: translateY(calc(-1 * var(--dev-item-h) * 4)); }
+    71.43%  { transform: translateY(calc(-1 * var(--dev-item-h) * 5)); }
+    83.57%  { transform: translateY(calc(-1 * var(--dev-item-h) * 5)); }
+    85.71%  { transform: translateY(calc(-1 * var(--dev-item-h) * 6)); }
+    97.86%  { transform: translateY(calc(-1 * var(--dev-item-h) * 6)); }
+    100%    { transform: translateY(calc(-1 * var(--dev-item-h) * 7)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
