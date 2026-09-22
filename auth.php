@@ -101,11 +101,17 @@ try {
     // already exists — ignore.
 }
 
-// The admin promo code is kept out of the (public) repo: it lives in testcom.local.php,
+// The admin promo code(s) are kept out of the (public) repo: they live in testcom.local.php,
 // which is git-ignored and uploaded to the server by deploy.py. Without that file the
-// promo feature is simply disabled.
+// promo feature is simply disabled. 'promo_admin_code' can be one code (string) or several
+// (an array), so more than one code can unlock admin at the same time.
 $testcomLocal = is_file(__DIR__ . '/testcom.local.php') ? require __DIR__ . '/testcom.local.php' : [];
-define('TESTCOM_PROMO_ADMIN_CODE', is_array($testcomLocal) ? (string) ($testcomLocal['promo_admin_code'] ?? '') : '');
+$testcomPromoRaw = is_array($testcomLocal) ? ($testcomLocal['promo_admin_code'] ?? '') : '';
+$testcomPromoCodes = array_values(array_filter(array_map(
+    'trim',
+    is_array($testcomPromoRaw) ? $testcomPromoRaw : [(string) $testcomPromoRaw]
+), fn($c) => $c !== ''));
+define('TESTCOM_PROMO_ADMIN_CODES', $testcomPromoCodes);
 
 function testcomJsonInput(): array {
     $raw = file_get_contents('php://input');
@@ -271,7 +277,12 @@ switch ($action) {
             testcomRespond(['error' => 'Sign in first, then redeem your promo code.'], 401);
         }
         $code = trim((string) ($input['code'] ?? ''));
-        if (TESTCOM_PROMO_ADMIN_CODE === '' || strcasecmp($code, TESTCOM_PROMO_ADMIN_CODE) !== 0) {
+        $validCode = $code !== '' && array_reduce(
+            TESTCOM_PROMO_ADMIN_CODES,
+            fn($found, $known) => $found || strcasecmp($code, $known) === 0,
+            false
+        );
+        if (!$validCode) {
             testcomRespond(['error' => 'Invalid promo code.'], 400);
         }
         $stmt = $pdo->prepare("UPDATE testcom_users SET role = 'admin' WHERE id = ?");
