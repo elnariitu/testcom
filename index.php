@@ -16,7 +16,7 @@
             if (theme !== 'light') document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="style.css?v=59">
+    <link rel="stylesheet" href="style.css?v=61">
     <link rel="stylesheet" href="games.css?v=3">
     <link rel="stylesheet" href="mafia.css?v=1">
 </head>
@@ -55,6 +55,11 @@
         <button class="icon-btn" id="mute-btn" onclick="toggleMute()" aria-label="Sound">
             <span id="mute-icon" class="icon-svg"></span>
         </button>
+    </div>
+
+    <div class="site-course-brand" aria-hidden="true">
+        <img src="assets/itu-logo.png" alt="" draggable="false">
+        <span>IT3-MKM2601</span>
     </div>
 
     <!-- Account bar: only shown on the start screen -->
@@ -336,11 +341,6 @@
 
         <!-- Start: mode carousel (Quiz / Essay / Weekly Test / Game) -->
         <div id="start-screen" class="hidden">
-            <!-- Decorative watermark: IITU logo + course code, not clickable -->
-            <div class="itu-watermark" aria-hidden="true">
-                <img src="assets/itu-logo.png" alt="" draggable="false">
-                <span class="itu-watermark-text">IT3-MKM2601</span>
-            </div>
             <p id="welcome-text"></p>
             <div class="mode-carousel" id="mode-carousel">
                 <button class="mode-arrow mode-arrow-left" onclick="rotateMode(-1)" aria-label="Previous mode"><span class="icon-svg" id="mode-prev-icon"></span></button>
