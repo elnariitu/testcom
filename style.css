@@ -2244,6 +2244,23 @@ body.admin-copy-enabled * {
     font-size: clamp(1.25rem, 3vw, 2rem);
 }
 
+/* Phone/tablet: pressing the menu button opens a full-height panel flush against the
+   left edge, the same as the desktop's opened panel - just no permanent icon rail when
+   it's closed (closed is handled by the plain .hidden utility, so it's fully gone). */
+@media (max-width: 899px) {
+    .menu-panel {
+        left: 0;
+        top: 0;
+        width: min(320px, 84vw);
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        padding: 86px 16px 18px;
+        border-radius: 0 18px 18px 0;
+        border-left: 0;
+    }
+}
+
 @media (min-width: 900px) {
     body {
         padding-left: 88px;

@@ -151,7 +151,7 @@ def publish_ftp(env, dry_run, force):
     host = env.get("FTP_HOST")
     user = env.get("FTP_USER")
     password = env.get("FTP_PASS")
-    root = env.get("FTP_REMOTE_DIR", "/public_html/testcom").rstrip("/")
+    root = env.get("FTP_REMOTE_DIR", "/public_html/quiz-iitu.mcm2601").rstrip("/")
     if not (host and user and password):
         log("ftp: FTP_HOST / FTP_USER / FTP_PASS missing (.deploy.env) - skipping.")
         return False
